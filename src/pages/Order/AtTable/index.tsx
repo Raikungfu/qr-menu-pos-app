@@ -7,11 +7,10 @@ import React, { useEffect } from "react";
 type AtTableProps = {};
 
 const AtTable: React.FC<AtTableProps> = () => {
+  const ref = React.useRef<HTMLDivElement>(null);
   const {
-    ref,
     handleMouseDown,
-    handleMouseLeave,
-    handleMouseUp,
+    handleMouseLeaveOrUp,
     handleMouseMove,
     handleWheel,
   } = useDragScroll();
@@ -27,13 +26,13 @@ const AtTable: React.FC<AtTableProps> = () => {
   return (
     <div className="grid grid-cols-3 gap-2 h-screen">
       <div
-        className="scrollable overflow-y-auto pb-28"
+        className="scrollable overflow-y-auto pb-80"
         ref={ref}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onWheel={handleWheel}
+        onMouseDown={(e) => handleMouseDown(e, ref)}
+        onMouseMove={(e) => handleMouseMove(e, ref)}
+        onMouseUp={handleMouseLeaveOrUp}
+        onMouseLeave={handleMouseLeaveOrUp}
+        onWheel={(e) => handleWheel(e, ref)}
       >
         <div>
           {orders.map((order, index) => (
