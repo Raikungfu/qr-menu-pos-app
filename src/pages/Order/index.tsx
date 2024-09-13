@@ -6,13 +6,12 @@ import { OrderStatus } from "@/constants/orders";
 import useDragScroll from "@/hooks/useDragScroll";
 
 const Order = () => {
+  const ref = React.useRef<HTMLDivElement>(null);
   const {
-    ref,
     handleMouseDown,
-    handleMouseLeave,
-    handleMouseUp,
+    handleMouseLeaveOrUp,
     handleMouseMove,
-    handleWheel
+    handleWheel,
   } = useDragScroll();
   const [activeTab, setActiveTab] = React.useState<number>(1);
   const [activeStatus, setActiveStatus] = React.useState<OrderStatus>(
@@ -88,11 +87,11 @@ const Order = () => {
         <nav
           className="mt-5 flex gap-3 overflow-x-auto scrollable"
           ref={ref}
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onWheel={handleWheel}
+          onMouseDown={(e) => handleMouseDown(e, ref)}
+          onMouseMove={(e) => handleMouseMove(e, ref)}
+          onMouseUp={handleMouseLeaveOrUp}
+          onMouseLeave={handleMouseLeaveOrUp}
+          onWheel={(e) => handleWheel(e, ref)}
         >
           {status.map((status) => (
             <Button

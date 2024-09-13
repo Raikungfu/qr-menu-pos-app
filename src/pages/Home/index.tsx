@@ -16,11 +16,12 @@ type Category = {
 };
 
 const Home = () => {
+  const categoriesRef = React.useRef<HTMLDivElement>(null);
+  const productsRef = React.useRef<HTMLDivElement>(null);
+  const orderedProductsRef = React.useRef<HTMLDivElement>(null);
   const {
-    ref,
     handleMouseDown,
-    handleMouseLeave,
-    handleMouseUp,
+    handleMouseLeaveOrUp,
     handleMouseMove,
     handleWheel,
   } = useDragScroll();
@@ -61,12 +62,12 @@ const Home = () => {
       <div className="bg-gray-200 h-full w-9/12 p-6">
         <div
           className="w-full bg-white h-24 flex items-center gap-2 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
-          ref={ref}
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onWheel={handleWheel}
+          ref={categoriesRef}
+          onMouseDown={(e) => handleMouseDown(e, categoriesRef)}
+          onMouseMove={(e) => handleMouseMove(e, categoriesRef)}
+          onMouseUp={handleMouseLeaveOrUp}
+          onMouseLeave={handleMouseLeaveOrUp}
+          onWheel={(e) => handleWheel(e, categoriesRef)}
         >
           {categories.map((category, index) => (
             <CategoryCard key={index} name={category.name} />
@@ -74,7 +75,15 @@ const Home = () => {
         </div>
 
         {/* Product along with category */}
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 w-full mt-6 pb-44 max-h-[90%] overflow-auto scrollable">
+        <div
+          className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 w-full mt-6 pb-44 max-h-[90%] overflow-auto scrollable"
+          ref={productsRef}
+          onMouseDown={(e) => handleMouseDown(e, productsRef)}
+          onMouseMove={(e) => handleMouseMove(e, productsRef)}
+          onMouseUp={handleMouseLeaveOrUp}
+          onMouseLeave={handleMouseLeaveOrUp}
+          onWheel={(e) => handleWheel(e, productsRef)}
+        >
           <CategoryItemCard />
           <CategoryItemCard />
           <CategoryItemCard />
@@ -93,7 +102,19 @@ const Home = () => {
         {/* order item */}
         <div className="w-full h-[70%] px-4 pt-2">
           <Textarea placeholder="Nhập ghi chú" />
-          <div className="flex flex-col gap-2 w-full mt-3 overflow-y-auto">
+          <div
+            className="flex flex-col gap-2 w-full mt-3 max-h-[82%] overflow-auto scrollable"
+            ref={orderedProductsRef}
+            onMouseDown={(e) => handleMouseDown(e, orderedProductsRef)}
+            onMouseMove={(e) => handleMouseMove(e, orderedProductsRef)}
+            onMouseUp={handleMouseLeaveOrUp}
+            onMouseLeave={handleMouseLeaveOrUp}
+            onWheel={(e) => handleWheel(e, orderedProductsRef)}
+          >
+            <OrderedProductCard />
+            <OrderedProductCard />
+            <OrderedProductCard />
+            <OrderedProductCard />
             <OrderedProductCard />
           </div>
         </div>
@@ -111,7 +132,7 @@ const Home = () => {
                 <h3 className="underline">20.000đ</h3>
               </div>
               <div className="flex flex-col items-center cursor-pointer">
-                <Printer className="text-primary"/>
+                <Printer className="text-primary" />
                 <h3 className="text-sm">In tạm tính</h3>
               </div>
             </div>
