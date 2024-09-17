@@ -1,34 +1,34 @@
 type Order = {
-  code: string;
-  time: string;
-  status: string;
-  price: string;
-  quantity: string;
-  table: string;
-  paymentStatus: string;
-  paymentMethod: string;
+  Code: number;
+  Time: string;
+  Status: string;
+  Price: string;
+  Quantity: string;
+  Table: string;
+  PaymentStatus: string;
+  PaymentMethod: string;
 };
 
 type OrderList = {
-  date: string;
-  children: Order[];
+  Date: string;
+  Children: Order[];
 }[];
 
 type Item = {
-  productId: number;
-  quantity: number;
-  size: string;
-  option: Option[];
-  note: string;
-  price: number;
+  ProductId: number;
+  Quantity: number;
+  Size: string;
+  Option: Option[];
+  Note: string;
+  Price: number;
 };
 
 type Option = {
-  id: number;
-  name: string;
+  Id: number;
+  Name: string;
 };
 
-enum OrderStatus {
+export enum OrderStatus {
   ALL = "Tất cả",
   PENDING = "Chờ xác nhận",
   CONFIRMED = "Đã xác nhận",
@@ -38,4 +38,17 @@ enum OrderStatus {
   CANCELLED = "Hủy",
 }
 
-export { Order, OrderList, Item, OrderStatus };
+type OrderItem = {
+  OrderItemId: number;
+  MenuItemId: number;
+  Note: string;
+  SizeOptions: string;
+  Quantity: number;
+  Name: string;
+  Image: string;
+  Description: string;
+  ItemPrice: number;
+  Type: string;
+};
+
+export type { Order, OrderList, Item, OrderItem };
