@@ -1,4 +1,6 @@
 import React from "react";
+import { Printer } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import {
   CategoryCard,
@@ -8,7 +10,7 @@ import {
 import useDragScroll from "@/hooks/useDragScroll";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Printer } from "lucide-react";
+import config from "@/configs";
 
 type Category = {
   id: number;
@@ -16,6 +18,7 @@ type Category = {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const categoriesRef = React.useRef<HTMLDivElement>(null);
   const productsRef = React.useRef<HTMLDivElement>(null);
   const orderedProductsRef = React.useRef<HTMLDivElement>(null);
@@ -137,9 +140,9 @@ const Home = () => {
               </div>
             </div>
             <div className="flex m-auto">
-              <Button size="lg" className="text-lg px-14">
-                Thanh toán
-              </Button>
+                <Button onClick={() => navigate(config.routes.payment)} size="lg" className="text-lg px-14">
+                  Thanh toán
+                </Button>
             </div>
           </div>
         </div>

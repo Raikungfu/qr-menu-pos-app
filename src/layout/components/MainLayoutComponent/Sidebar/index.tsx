@@ -21,8 +21,8 @@ const Sidebar = () => {
         <NavItem title="Cửa hàng" to={config.routes.shop} icon={<Store />} />
         <NavItem title="Thu chi" to={config.routes.revenue} icon={<Landmark />} />
         <NavItem
-          title="Thống kê"
-          to={config.routes.statistic}
+          title="Báo cáo"
+          to={config.routes.overview}
           icon={<ChartColumnDecreasing />}
         />
         <NavItem title="Cài đặt" to={config.routes.setting} icon={<Settings />} />

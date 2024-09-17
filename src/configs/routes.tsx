@@ -5,8 +5,14 @@ const routes = {
     shop: '/shop',
     atcounter: '/at-counter',
     revenue: '/revenue',
-    statistic: '/statistic',
+    overview: '/statistic/overview',
+    business: '/statistic/business',
+    bestseller: '/statistic/bestseller',
+    receipt: '/statistic/receipt',
+    topping: '/statistic/topping',
     setting: '/setting',
+    payment: '/shop/payment',
+
 }
 
 export default routes;

@@ -5,7 +5,7 @@ type MenuProps = {
 };
 
 const NavMenu: React.FC<MenuProps> = ({ children }) => {
-  return <div className="flex items-center flex-col gap-2">{children}</div>;
+  return <div className="flex items-center flex-col gap-2 duration-500">{children}</div>;
 };
 
 export default NavMenu;
