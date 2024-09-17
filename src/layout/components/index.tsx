@@ -1,2 +1,5 @@
-export {default as Header} from './Header';
-export {default as Sidebar} from './Sidebar';
+export {default as MainLayoutHeader} from './MainLayoutComponent/Header';
+export {default as MainLayoutSidebar} from './MainLayoutComponent/Sidebar';
+
+export {default as StatisticLayoutSidebar} from './StatisticLayoutComponent/Sidebar';
+
