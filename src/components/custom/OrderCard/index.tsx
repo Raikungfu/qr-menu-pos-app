@@ -47,7 +47,10 @@ const OrderCard = ({ data, onClick, active = false }: OrderCardProps) => {
           </div>
         </div>
         <h4 className="text-[#80C456] font-semibold">
-          {data.Price}{" "}
+          {Number(data.Price).toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}{" "}
           <span className="text-[#69AEFF] font-medium">
             ({data.Quantity} món)
           </span>

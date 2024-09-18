@@ -9,6 +9,16 @@ type Order = {
   PaymentMethod: string;
 };
 
+type StatusOrderListCount = {
+  CountAll: number;
+  CountPENDING: number;
+  CountCONFIRMED: number;
+  CountPROCESSING: number;
+  CountPROCESSED: number;
+  CountCOMPLETED: number;
+  CountCANCELLED: number;
+};
+
 type OrderList = {
   Date: string;
   Children: Order[];
@@ -35,7 +45,7 @@ export enum OrderStatus {
   PROCESSING = "Đang xử lý",
   PROCESSED = "Đã chế biến",
   COMPLETED = "Hoàn thành",
-  CANCELLED = "Hủy",
+  CANCELLED = "Đã Hủy",
 }
 
 type OrderItem = {
@@ -51,4 +61,4 @@ type OrderItem = {
   Type: string;
 };
 
-export type { Order, OrderList, Item, OrderItem };
+export type { Order, OrderList, Item, OrderItem, StatusOrderListCount };

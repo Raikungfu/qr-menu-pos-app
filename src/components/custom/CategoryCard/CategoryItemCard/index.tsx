@@ -7,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import img from "@/assets/images/bacxiu.png";
 import { Button } from "@/components/ui/button";
 import { SelectGroup, SelectLabel } from "@radix-ui/react-select";
 import { Product } from "@/constants/Product";
@@ -23,7 +22,12 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ product }) => {
       <div className="h-[40%] flex flex-col items-center justify-evenly w-full">
         <div className="flex flex-col items-center justify-center">
           <h3 className="font-bold text-xl">{product.Name}</h3>
-          <h4 className="text-primary font-semibold">{product.Price}</h4>
+          <h4 className="text-primary font-semibold">
+            {product.Price.toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </h4>
         </div>
         <div className="flex items-center w-full px-2 justify-evenly">
           <Select>

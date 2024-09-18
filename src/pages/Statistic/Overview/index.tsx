@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import config from "@/configs";
-import { DateRangePicker, LineChart } from "@/components/custom";
-import { lineChartData } from "@/data/dummy";
+import { DateRangePicker } from "@/components/custom";
 import { ResponsiveLine } from "@nivo/line";
 import { ChartData } from "@/constants/statistic";
 import { API_GET_STATISTIC } from "@/Service/Statistic";
 import { DateRange } from "react-day-picker";
-import { addDays } from "date-fns";
 
 const Overview = () => {
   const navigate = useNavigate();
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: new Date(),
-    to: addDays(new Date(), 7),
-  });
   const [statisticData, setStatisticData] = React.useState<ChartData>();
 
   useEffect(() => {
@@ -39,7 +33,6 @@ const Overview = () => {
   }, [location.pathname]);
 
   const handleDateChange = (newDateRange: DateRange) => {
-    setDateRange(newDateRange);
     const fetchData = async () => {
       try {
         if (location.pathname === "/statistic/overview") {
@@ -82,19 +75,28 @@ const Overview = () => {
           <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Doanh thu</h3>
             <h3 className="font-semibold text-2xl mt-4">
-              {statisticData?.TotalRevenue}
+              {statisticData?.TotalRevenue.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
             </h3>
           </div>
           <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">
             <h3 className="">Lợi nhuận</h3>
             <h3 className="font-semibold text-2xl mt-4">
-              {statisticData?.TotalProfit}
+              {statisticData?.TotalProfit.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
             </h3>
           </div>
           <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Chi phí</h3>
             <h3 className="font-semibold text-2xl mt-4">
-              {statisticData?.TotalCost}
+              {statisticData?.TotalCost.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
             </h3>
           </div>
           <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">

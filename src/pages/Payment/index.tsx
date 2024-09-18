@@ -22,7 +22,7 @@ const Payment = ({}: PaymentProps) => {
         />
         <h3 className="text-2xl font-semibold">Thanh toán</h3>
       </header>
-      <main className="grid grid-cols-2 h-full w-full mt-[74px]">
+      <main className="grid grid-cols-2 h-full w-full mt-8">
         <div className="bg-[#ebf6fc] flex flex-col gap-3 h-full pb-24 border-r">
           <div className="flex justify-between p-3 pb-0 items-center font-semibold min-h-[34px]">
             <h3>Tạm tính</h3>
@@ -63,14 +63,14 @@ const Payment = ({}: PaymentProps) => {
           <div className="flex bg-white flex-col p-4 gap-6 min-h-[220px]">
             <div className="flex p-2 gap-6">
               <Label className="text-sm">Ghi chú hóa đơn</Label>
-              <Input className="w-[90%]"/>
+              <Input className="w-[90%]" />
             </div>
             <div className="flex justify-around">
               <Button className="p-10">
                 <DollarSign size={20} />
                 <h3 className="text-lg">Tiền mặt</h3>
               </Button>
-              <Button className="p-10" variant='outline'>
+              <Button className="p-10" variant="outline">
                 <DollarSign size={20} />
                 <h3 className="text-lg">Chuyển khoản</h3>
               </Button>

@@ -20,9 +20,7 @@ export const API_GET_MENU_BY_SHOPID = <T>(
     });
 };
 
-export const API_GET_CATEGORIES_BY_SHOPID = <T>(
-  id: FormDataOrOther<T>
-): Promise<T> => {
+export const API_GET_CATEGORIES_BY_SHOPID = <T>(): Promise<T> => {
   return AxiosApi.get<T>(`/api/categories`)
     .then((response) => {
       if (response.data) {

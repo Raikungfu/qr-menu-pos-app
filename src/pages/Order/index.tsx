@@ -1,11 +1,23 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect } from "react";
 import AtTable from "./AtTable";
 import AtCounter from "./AtCounter";
-import { OrderStatus } from "@/constants/orders";
+import {
+  OrderList,
+  OrderStatus,
+  StatusOrderListCount,
+} from "@/constants/orders";
 import useDragScroll from "@/hooks/useDragScroll";
+import { useLocation } from "react-router-dom";
+import {
+  API_GET_ORDER,
+  API_GET_STATUS_ORDER_LIST_COUNT,
+} from "@/Service/Order";
 
 const Order = () => {
+  const [orders, setOrders] = React.useState<OrderList>();
+  const [statusOrderListCount, setStatusOrderListCount] =
+    React.useState<StatusOrderListCount>();
   const ref = React.useRef<HTMLDivElement>(null);
   const {
     handleMouseDown,
@@ -21,12 +33,12 @@ const Order = () => {
     {
       id: 1,
       tabTitle: "Tại bàn",
-      component: <AtTable />,
+      component: <AtTable orders={orders ?? []} />,
     },
     {
       id: 2,
       tabTitle: "Tại quầy",
-      component: <AtCounter />,
+      component: <AtCounter orders={orders ?? []} />,
     },
   ];
 
@@ -34,32 +46,84 @@ const Order = () => {
     {
       id: 1,
       status: OrderStatus.ALL,
+      count: statusOrderListCount?.CountAll,
+      key: "ALL",
     },
     {
       id: 2,
       status: OrderStatus.PENDING,
+      count: statusOrderListCount?.CountPENDING,
+      key: "PENDING",
     },
     {
       id: 3,
       status: OrderStatus.CONFIRMED,
+      count: statusOrderListCount?.CountCONFIRMED,
+      key: "CONFIRMED",
     },
     {
       id: 4,
       status: OrderStatus.PROCESSING,
+      count: statusOrderListCount?.CountPROCESSING,
+      key: "PROCESSING",
     },
     {
       id: 5,
       status: OrderStatus.PROCESSED,
+      count: statusOrderListCount?.CountPROCESSED,
+      key: "PROCESSED",
     },
     {
       id: 6,
       status: OrderStatus.COMPLETED,
+      count: statusOrderListCount?.CountCOMPLETED,
+      key: "COMPLETED",
     },
     {
       id: 7,
       status: OrderStatus.CANCELLED,
+      count: statusOrderListCount?.CountCANCELLED,
+      key: "CANCELLED",
     },
   ];
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (location.pathname === "/order") {
+        const [ordersData, statusOrderListCountData] = await Promise.all([
+          API_GET_ORDER({}),
+          API_GET_STATUS_ORDER_LIST_COUNT(),
+        ]);
+
+        if (ordersData) {
+          const orders = ordersData as unknown as OrderList;
+          setOrders(orders);
+        }
+
+        if (statusOrderListCountData) {
+          const statusOrderListCount =
+            statusOrderListCountData as unknown as StatusOrderListCount;
+          setStatusOrderListCount(statusOrderListCount);
+        }
+      }
+    };
+    fetchData();
+  }, [location.pathname]);
+
+  const selectStatusOrderList = async (key?: string) => {
+    try {
+      const ordersData = await API_GET_ORDER({ key });
+
+      if (ordersData) {
+        const orders = ordersData as unknown as OrderList;
+        setOrders(orders);
+      }
+    } catch (error) {
+      console.error("Error fetching order data:", error);
+    }
+  };
 
   const handleTabClick = (id: number) => {
     setActiveTab(id);
@@ -79,7 +143,7 @@ const Order = () => {
               }`}
               onClick={() => handleTabClick(tab.id)}
             >
-              {tab.tabTitle} <span>(12)</span>
+              {tab.tabTitle} <span>({statusOrderListCount?.CountAll})</span>
             </nav>
           ))}
           <div></div>
@@ -101,10 +165,15 @@ const Order = () => {
                 activeStatus === status.status ? "bg-blue-500 text-white" : ""
               }`}
               size="lg"
-              onClick={() => setActiveStatus(status.status)}
+              onClick={() => {
+                setActiveStatus(status.status);
+                selectStatusOrderList(
+                  status.key && status.key !== "ALL" ? status.key : undefined
+                );
+              }}
             >
               {status.status}
-              <span className="ml-[4px]">(12)</span>
+              <span className="ml-[4px]">({status.count})</span>
             </Button>
           ))}
         </nav>
