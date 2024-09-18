@@ -20,6 +20,7 @@ import {
 
 type DateRangePickerProps = {
   className?: string;
+  onDateChange: (dateRange: DateRange) => void;
 };
 
 type DateRange = {
@@ -27,11 +28,26 @@ type DateRange = {
   to: Date;
 };
 
-const DateRangePicker = ({ className }: DateRangePickerProps) => {
+const DateRangePicker = ({ className, onDateChange }: DateRangePickerProps) => {
   const [date, setDate] = React.useState<DateRange>({
     from: new Date(),
     to: addDays(new Date(), 7),
   });
+
+  const handleChange = (value: string) => {
+    const preset = presets.find((p) => p.value === value);
+    if (preset) {
+      setDate(preset.dates);
+      onDateChange(preset.dates);
+    }
+  };
+
+  const handleSelectChange = (value: DateRange) => {
+    if (value) {
+      setDate(value);
+      onDateChange(value);
+    }
+  };
 
   const presets = [
     {
@@ -55,13 +71,6 @@ const DateRangePicker = ({ className }: DateRangePickerProps) => {
       dates: { from: addDays(new Date(), -89), to: new Date() },
     },
   ];
-
-  const handlePresetChange = (value: string) => {
-    const preset = presets.find((p) => p.value === value);
-    if (preset) {
-      setDate(preset.dates);
-    }
-  };
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -93,7 +102,7 @@ const DateRangePicker = ({ className }: DateRangePickerProps) => {
         <PopoverContent className="w-auto p-0" align="start">
           <div className="flex flex-col">
             <div className="p-2">
-              <Select onValueChange={handlePresetChange}>
+              <Select onValueChange={handleChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select preset" />
                 </SelectTrigger>
@@ -113,7 +122,7 @@ const DateRangePicker = ({ className }: DateRangePickerProps) => {
               selected={date}
               onSelect={(range) => {
                 if (range) {
-                  setDate(range as DateRange);
+                  handleSelectChange(range as DateRange);
                 }
               }}
               numberOfMonths={2}

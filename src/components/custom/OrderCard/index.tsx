@@ -42,10 +42,7 @@ const OrderCard = ({ data, onClick, active = false }: OrderCardProps) => {
           <div className="flex gap-3 items-center">
             <p className="text-gray-400 text-xs">{`${new Date(
               data.Time
-            ).toLocaleDateString()} ${new Date(data.Time).toLocaleTimeString(
-              "en-GB",
-              { hour12: false }
-            )}`}</p>
+            ).toLocaleTimeString("en-GB", { hour12: false })}`}</p>
             <p className="text-[#69AEFF] font-semibold">{data.Status}</p>
           </div>
         </div>
