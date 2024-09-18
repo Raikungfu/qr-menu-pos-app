@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,56 +6,61 @@ import config from "@/configs";
 import { DateRangePicker, LineChart } from "@/components/custom";
 import { lineChartData } from "@/data/dummy";
 import { ResponsiveLine } from "@nivo/line";
-
-const data = [
-  {
-    id: "Doanh thu",
-    data: [
-      { x: "23 Th 10", y: 5 },
-      { x: "24 Th 10", y: 38 },
-      { x: "25 Th 10", y: 6 },
-      { x: "26 Th 10", y: 12 },
-      { x: "27 Th 10", y: 14 },
-      { x: "28 Th 10", y: 0 },
-    ],
-  },
-  {
-    id: "Lợi nhuận",
-    data: [
-      { x: "23 Th 10", y: 5 },
-      { x: "24 Th 10", y: 38 },
-      { x: "25 Th 10", y: 6 },
-      { x: "26 Th 10", y: 11 },
-      { x: "27 Th 10", y: 14 },
-      { x: "28 Th 10", y: 0 },
-    ],
-  },
-  {
-    id: "Chi phí",
-    data: [
-      { x: "23 Th 10", y: 0 },
-      { x: "24 Th 10", y: 0 },
-      { x: "25 Th 10", y: 0 },
-      { x: "26 Th 10", y: 2 },
-      { x: "27 Th 10", y: 0 },
-      { x: "28 Th 10", y: 0 },
-    ],
-  },
-  {
-    id: "Doanh số",
-    data: [
-      { x: "23 Th 10", y: 5 },
-      { x: "24 Th 10", y: 38 },
-      { x: "25 Th 10", y: 6 },
-      { x: "26 Th 10", y: 12 },
-      { x: "27 Th 10", y: 14 },
-      { x: "28 Th 10", y: 0 },
-    ],
-  },
-];
+import { ChartData } from "@/constants/statistic";
+import { API_GET_STATISTIC } from "@/Service/Statistic";
+import { DateRange } from "react-day-picker";
+import { addDays } from "date-fns";
 
 const Overview = () => {
   const navigate = useNavigate();
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: new Date(),
+    to: addDays(new Date(), 7),
+  });
+  const [statisticData, setStatisticData] = React.useState<ChartData>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (location.pathname === "/statistic/overview") {
+          const statistic = await API_GET_STATISTIC({});
+
+          if (statistic) {
+            const statisticData = statistic as unknown as ChartData;
+            setStatisticData(statisticData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    };
+
+    fetchData();
+  }, [location.pathname]);
+
+  const handleDateChange = (newDateRange: DateRange) => {
+    setDateRange(newDateRange);
+    const fetchData = async () => {
+      try {
+        if (location.pathname === "/statistic/overview") {
+          const statistic = await API_GET_STATISTIC({
+            startDate: newDateRange.from,
+            endDate: newDateRange.to,
+          });
+
+          if (statistic) {
+            const statisticData = statistic as unknown as ChartData;
+            setStatisticData(statisticData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    };
+
+    fetchData();
+  };
+
   return (
     <div className="overflow-y-auto max-h-screen">
       <div className="h-[74px] bg-white w-full shadow-md flex items-center py-3 px-6 gap-8 fixed top-0">
@@ -70,25 +75,33 @@ const Overview = () => {
         <div className="min-h-14 border-b-2">
           <div className="w-4/5 flex items-center justify-between p-3">
             <h3 className="text-xl font-semibold">Báo cáo tổng quan</h3>
-            <DateRangePicker />
+            <DateRangePicker onDateChange={handleDateChange} />
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-2 min-h-40 p-2 w-full">
           <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Doanh thu</h3>
-            <h3 className="font-semibold text-2xl mt-4">77,699,581.66đ</h3>
+            <h3 className="font-semibold text-2xl mt-4">
+              {statisticData?.TotalRevenue}
+            </h3>
           </div>
           <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">
             <h3 className="">Lợi nhuận</h3>
-            <h3 className="font-semibold text-2xl mt-4">77,699,581.66đ</h3>
+            <h3 className="font-semibold text-2xl mt-4">
+              {statisticData?.TotalProfit}
+            </h3>
           </div>
           <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Chi phí</h3>
-            <h3 className="font-semibold text-2xl mt-4">77,699,581.66đ</h3>
+            <h3 className="font-semibold text-2xl mt-4">
+              {statisticData?.TotalCost}
+            </h3>
           </div>
           <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">
-            <h3 className="">Doanh thu thuần</h3>
-            <h3 className="font-semibold text-2xl mt-4">77,699,581.66đ</h3>
+            <h3 className="">Số lượng sản phẩm đã bán</h3>
+            <h3 className="font-semibold text-2xl mt-4">
+              {statisticData?.TotalSales}
+            </h3>
           </div>
         </div>
         <div className="w-full p-2">
@@ -110,7 +123,7 @@ const Overview = () => {
             </div>
             <div className="h-[400px] p-6">
               <ResponsiveLine
-                data={data}
+                data={statisticData?.DataStatistic ?? []}
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                 xScale={{ type: "point" }}
                 yScale={{

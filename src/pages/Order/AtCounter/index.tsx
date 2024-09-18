@@ -52,7 +52,9 @@ const AtCounter = () => {
           {orders.map((order, index) => (
             <div key={index} className="mt-2">
               <div className="w-full bg-[#C4DDF2] p-1">
-                <p className="text-lg font-semibold">{order.Date}</p>
+                <p className="text-lg font-semibold">{`${new Date(
+                  order.Date
+                ).toLocaleTimeString("en-GB", { hour12: false })}`}</p>
               </div>
               <div className="flex flex-col justify-center">
                 {order.Children.map((child, index) => (

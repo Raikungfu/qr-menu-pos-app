@@ -63,7 +63,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ order, orderItems }) => {
             ))}
 
             <div className="flex justify-between font-medium">
-              <h3>Thanh toán 100%</h3>
+              <h3>{order.PaymentStatus}</h3>
               <h3>
                 Tổng: <span className="text-[#80C456]">{order.Price}</span>
               </h3>
