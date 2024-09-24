@@ -1,4 +1,4 @@
-import useSignalR from "@/Hook/Hubs";
+import useSignalR from "@/hooks/Hubs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
