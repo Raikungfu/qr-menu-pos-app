@@ -1,9 +1,10 @@
+import { useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+
 import { OrderCard, OrderItemCard } from "@/components/custom";
 import { Order, OrderItem, OrderList } from "@/constants/orders";
 import useDragScroll from "@/hooks/useDragScroll";
 import { API_GET_ORDER, API_GET_ORDER_DETAIL } from "@/Service/Order";
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 type AtTableProps = {};
 
