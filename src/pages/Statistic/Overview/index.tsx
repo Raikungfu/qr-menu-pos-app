@@ -55,7 +55,7 @@ const Overview = () => {
   };
 
   return (
-    <div className="overflow-y-auto max-h-screen">
+    <div className="overflow-y-auto scrollable max-h-screen">
       <div className="h-[74px] bg-white w-full shadow-md flex items-center py-3 px-6 gap-8 fixed top-0">
         <Undo2
           size={32}
@@ -71,8 +71,8 @@ const Overview = () => {
             <DateRangePicker onDateChange={handleDateChange} />
           </div>
         </div>
-        <div className="flex items-center flex-wrap gap-2 min-h-40 p-2 w-full">
-          <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-h-40 p-2 w-full">
+          <div className="ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Doanh thu</h3>
             <h3 className="font-semibold text-2xl mt-4">
               {statisticData?.TotalRevenue.toLocaleString("vi-VN", {
@@ -81,7 +81,7 @@ const Overview = () => {
               })}
             </h3>
           </div>
-          <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">
+          <div className="bg-[#B7C9E3] rounded-2xl p-4 border-dashed">
             <h3 className="">Lợi nhuận</h3>
             <h3 className="font-semibold text-2xl mt-4">
               {statisticData?.TotalProfit.toLocaleString("vi-VN", {
@@ -90,7 +90,7 @@ const Overview = () => {
               })}
             </h3>
           </div>
-          <div className="min-h-32 min-w-[24%] ring-1 rounded-2xl p-4 border-dashed">
+          <div className="ring-1 rounded-2xl p-4 border-dashed">
             <h3 className="">Chi phí</h3>
             <h3 className="font-semibold text-2xl mt-4">
               {statisticData?.TotalCost.toLocaleString("vi-VN", {
@@ -99,7 +99,7 @@ const Overview = () => {
               })}
             </h3>
           </div>
-          <div className="bg-[#B7C9E3] min-h-32 min-w-[24%] rounded-2xl p-4 border-dashed">
+          <div className="bg-[#B7C9E3] rounded-2xl p-4 border-dashed">
             <h3 className="">Số lượng sản phẩm đã bán</h3>
             <h3 className="font-semibold text-2xl mt-4">
               {statisticData?.TotalSales}
