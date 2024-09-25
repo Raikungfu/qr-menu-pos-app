@@ -17,7 +17,9 @@ const NavItem = ({ to, className, icon, title, open }: NavItemProps) => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `group flex items-center text-base gap-3.5 font-medium p-2 rounded-lg ${isActive ? "bg-primary text-white" : "text-black"}`
+        `group flex items-center text-base gap-3.5 font-medium p-2 rounded-lg ${
+          isActive ? "bg-primary text-white" : "text-black"
+        }`
       }
     >
       <div>{React.createElement(icon, { size: 32 })}</div>

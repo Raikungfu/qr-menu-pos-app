@@ -1,8 +1,8 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import { routes } from "./routers";
 import OrderStatusComponent from "./components/custom/OrderStatus";
+import React from "react";
 
 function App() {
   return (
@@ -14,9 +14,8 @@ function App() {
             let Layout = MainLayout;
             if (route.layout) {
               Layout = route.layout;
-            }
-            else if (route.layout === null) {
-              Layout =  React.Fragment;
+            } else if (route.layout === null) {
+              Layout = React.Fragment;
             }
             return (
               <Route
@@ -32,6 +31,7 @@ function App() {
           })}
         </Routes>
       </BrowserRouter>
+      <OrderStatusComponent />
     </>
   );
 }

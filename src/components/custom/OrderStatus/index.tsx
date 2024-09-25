@@ -1,12 +1,9 @@
 import useSignalR from "@/hooks/Hubs";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const OrderStatusComponent: React.FC = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
-  const [orderId, setOrderId] = useState<number>(0);
   const [showNotification, setShowNotification] = useState(false);
-  const nav = useNavigate();
 
   const handleOrderStatusUpdate = (
     orderId: number,
@@ -14,7 +11,6 @@ const OrderStatusComponent: React.FC = () => {
     updateDate: Date,
     paymentMethod: string
   ) => {
-    setOrderId(orderId);
     triggerNotification(
       `Order ID: ${orderId}, Status: ${status} \nPayment method: ${updateDate}\n Time: ${paymentMethod}`
     );

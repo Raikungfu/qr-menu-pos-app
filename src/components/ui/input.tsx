@@ -22,8 +22,9 @@ const inputVariants = cva(
     },
   }
 );
+
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
@@ -31,12 +32,13 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, variant, type, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "input";
+    const { size, ...restProps } = props;
     return (
       <Comp
         type={type}
         className={cn(inputVariants({ variant, className }))}
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   }

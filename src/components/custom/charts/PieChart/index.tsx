@@ -1,5 +1,4 @@
 import { MayHaveLabel, ResponsivePie } from "@nivo/pie";
-import React from "react";
 
 type PieChartProps = {
   data: MayHaveLabel[];

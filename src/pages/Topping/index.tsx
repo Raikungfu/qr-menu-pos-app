@@ -2,7 +2,7 @@ import config from "@/configs";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const ChartReport = () => {
+const Topping = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -13,11 +13,11 @@ const ChartReport = () => {
             className="cursor-pointer"
             onClick={() => navigate(config.routes.home)}
           />
-          <h3 className="text-2xl font-semibold">Chart Report</h3>
+          <h3 className="text-2xl font-semibold">Topping</h3>
         </div>
       </div>
     </>
   );
 };
 
-export default ChartReport;
+export default Topping;
