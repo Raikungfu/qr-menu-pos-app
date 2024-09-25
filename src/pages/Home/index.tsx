@@ -38,7 +38,7 @@ const Home = () => {
         ]);
 
         if (categoriesData) {
-          var categories = categoriesData as unknown as Category[];
+          const categories = categoriesData as unknown as Category[];
 
           setCategories(
             categories.map((category) => ({
@@ -49,7 +49,7 @@ const Home = () => {
         }
 
         if (productsData) {
-          var products = productsData as unknown as Product[];
+          const products = productsData as unknown as Product[];
           setProducts(products);
         }
       } catch (error) {
@@ -76,7 +76,7 @@ const Home = () => {
       );
 
       if (productsData) {
-        var products = productsData as unknown as Product[];
+        const products = productsData as unknown as Product[];
         setProducts(products);
       }
     } catch (error) {
