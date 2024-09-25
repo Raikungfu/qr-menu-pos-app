@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type PaymentKeypad = {
   onAmountChange: (amount: number) => void;

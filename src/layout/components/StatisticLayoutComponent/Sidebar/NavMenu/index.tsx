@@ -9,8 +9,16 @@ type NavMenuProps = {
 
 const NavMenu = ({ open, setOpen, children }: NavMenuProps) => {
   return (
-    <div className={`min-h-screen ${open ? "w-72" : "w-[84px]"} px-4 border-r duration-500 sticky left-0 bg-white z-100`}>
-      <div className="py-3 flex justify-end">   
+    <div
+      className={`min-h-screen ${
+        open ? "w-72" : "w-[84px]"
+      } px-4 pt-3 border-r duration-500 sticky left-0 bg-white z-100`}
+    >
+      <div
+        className={`py-3 flex ${
+          open ? "justify-end" : "justify-center"
+        } items-center`}
+      >
         <Menu
           size={32}
           className="cursor-pointer"

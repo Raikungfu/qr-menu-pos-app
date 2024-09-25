@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Printer } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  CategoryCard,
-  CategoryItemCard,
-  OrderedProductCard,
-} from "@/components/custom";
+import { CategoryCard, CategoryItemCard } from "@/components/custom";
 import useDragScroll from "@/hooks/useDragScroll";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,7 +21,6 @@ const Home = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const {
     handleMouseDown,
@@ -33,14 +28,13 @@ const Home = () => {
     handleMouseMove,
     handleWheel,
   } = useDragScroll();
-  const [active, setActive] = React.useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [productsData, categoriesData] = await Promise.all([
           API_GET_MENU_BY_SHOPID({ shopId }),
-          API_GET_CATEGORIES_BY_SHOPID(shopId),
+          API_GET_CATEGORIES_BY_SHOPID(),
         ]);
 
         if (categoriesData) {

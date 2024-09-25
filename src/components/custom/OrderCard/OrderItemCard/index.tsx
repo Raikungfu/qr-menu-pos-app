@@ -10,7 +10,7 @@ interface OrderItemCardProps {
 const OrderItemCard: React.FC<OrderItemCardProps> = ({ order, orderItems }) => {
   const { toast } = useToast();
   return (
-    <div className="scrollable overflow-y-auto pb-80 h-full">
+    <div className="scrollable overflow-y-auto h-full">
       <div className="">
         <p className="bg-[#c4ddf2] p-2 text-xl font-semibold">
           Thông tin đơn hàng
@@ -42,14 +42,16 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ order, orderItems }) => {
                     alt={child.Name}
                     className="w-20 h-20 object-cover rounded-md mb-2"
                   />
-                  <div className="flex flex-col justify-start self-center">
+                  <div className="flex flex-col justify-start item-center">
                     <p className="pl-2 md:pl-4 text-lg font-semibold">
                       {child.Name} x {child.Quantity}
                     </p>
                     <ul className="pl-2 md:pl-4 list-disc text-sm text-gray-500 font-normal">
                       <li>
-                        {child.SizeOptions} - Note: {child.Description}
+                        {child.SizeOptions}{" "}
+                        {child.Note ? `- Note: ${child.Note}` : ""}
                       </li>
+                      <li>Description: {child.Description}</li>
                     </ul>
                   </div>
                 </div>
@@ -65,7 +67,13 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ order, orderItems }) => {
             <div className="flex justify-between font-medium">
               <h3>{order.PaymentStatus}</h3>
               <h3>
-                Tổng: <span className="text-[#80C456]">{order.Price}</span>
+                Tổng:{" "}
+                <span className="text-[#80C456]">
+                  {Number(order.Price).toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </span>
               </h3>
             </div>
             <div className="flex justify-end gap-72">

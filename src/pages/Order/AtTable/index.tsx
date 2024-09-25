@@ -4,11 +4,13 @@ import React, { useEffect } from "react";
 import { OrderCard, OrderItemCard } from "@/components/custom";
 import { Order, OrderItem, OrderList } from "@/constants/orders";
 import useDragScroll from "@/hooks/useDragScroll";
-import { API_GET_ORDER, API_GET_ORDER_DETAIL } from "@/Service/Order";
+import { API_GET_ORDER_DETAIL } from "@/Service/Order";
 
-type AtTableProps = {};
+type AtTableProps = {
+  orders: OrderList;
+};
 
-const AtTable: React.FC<AtTableProps> = () => {
+const AtTable: React.FC<AtTableProps> = ({ orders }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const {
     handleMouseDown,
@@ -16,12 +18,10 @@ const AtTable: React.FC<AtTableProps> = () => {
     handleMouseMove,
     handleWheel,
   } = useDragScroll();
-  const [orders, setOrders] = React.useState<OrderList>([]);
   const [selectedOrder, setselectedOrder] = React.useState<Order | null>(null);
   const [selectedOrderItems, setSelectedOrderItems] = React.useState<
     OrderItem[]
   >([]);
-  const location = useLocation();
 
   const GetOrderDetail = async (id: number) => {
     try {
@@ -35,25 +35,6 @@ const AtTable: React.FC<AtTableProps> = () => {
       console.error("Error fetching order detail data:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (location.pathname === "/order") {
-          const ordersData = await API_GET_ORDER();
-
-          if (ordersData) {
-            const orders = ordersData as unknown as OrderList;
-            setOrders(orders);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching order data:", error);
-      }
-    };
-
-    fetchData();
-  }, [location.pathname]);
 
   return (
     <div className="grid grid-cols-3 gap-2 h-screen">
