@@ -1,6 +1,5 @@
 import { ShopActionTypes, ShopTable } from "@/constants/shop";
 import { EllipsisVerticalIcon } from "lucide-react";
-import React from "react";
 
 type ShopTableCardProps = {
   data: ShopTable;

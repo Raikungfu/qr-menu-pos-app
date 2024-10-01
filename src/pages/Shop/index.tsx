@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ShopActionTypes, ShopTable, ShopZone } from "@/constants/shop";
-import { EllipsisVerticalIcon } from "lucide-react";
-import { set } from "date-fns";
 import ShopTableCard from "@/components/custom/ShopTableCard";
-import { table } from "console";
 import useDragScroll from "@/hooks/useDragScroll";
 
 const Shop = () => {

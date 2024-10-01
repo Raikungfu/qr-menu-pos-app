@@ -1,5 +1,4 @@
-import { useLocation } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 
 import { OrderCard, OrderItemCard } from "@/components/custom";
 import { Order, OrderItem, OrderList } from "@/constants/orders";
