@@ -1,7 +1,7 @@
 import config from "@/configs";
 import StatisticLayout from "@/layout/StatisticLayout";
 import { Home, AtCounter, Order, Shop, Payment } from "@/pages";
-import BestSeller from "@/pages/BestSeller";
+import BestSeller from "@/pages/Statistic/BestSeller";
 import Receipt from "@/pages/Receipt";
 import Revenue from "@/pages/Revenue";
 import Setting from "@/pages/Setting";

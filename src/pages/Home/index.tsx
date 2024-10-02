@@ -12,6 +12,7 @@ import {
   API_GET_CATEGORIES_BY_SHOPID,
   API_GET_MENU_BY_SHOPID,
 } from "@/Service/Product";
+import { useCartStore } from "@/store/cartStore";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Home = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const cartStore = useCartStore();
 
   const {
     handleMouseDown,
@@ -84,8 +86,12 @@ const Home = () => {
     }
   };
 
+  const handleAddToCart = (product: Product) => {
+    cartStore.addToCart(product);
+  }
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen py-4">
       <div className="bg-gray-200 h-full w-9/12 p-6">
         <div
           className="w-full bg-white h-24 flex items-center gap-2 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
@@ -119,7 +125,7 @@ const Home = () => {
           onWheel={(e) => handleWheel(e, productsRef)}
         >
           {products.map((product, index) => (
-            <CategoryItemCard key={index} product={product} />
+            <CategoryItemCard key={index} product={product} onClick={handleAddToCart} />
           ))}
         </div>
       </div>

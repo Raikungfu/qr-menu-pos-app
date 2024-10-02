@@ -17,7 +17,7 @@ const Sidebar = () => {
       <NavMenu>
         <NavItem title="Trang chủ" to={config.routes.home} icon={<House />} />
         <NavItem title="Tại quầy" to={config.routes.atcounter} icon={<ShoppingCart />} />
-        <NavItem title="Đơn online" to={config.routes.order} icon={<Tablet />} />
+        <NavItem title="Đơn hàng" to={config.routes.order} icon={<Tablet />} />
         <NavItem title="Cửa hàng" to={config.routes.shop} icon={<Store />} />
         <NavItem title="Thu chi" to={config.routes.revenue} icon={<Landmark />} />
         <NavItem
