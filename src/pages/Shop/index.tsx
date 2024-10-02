@@ -167,7 +167,7 @@ const Shop = () => {
         ))}
       </div>
       <div
-        className="overflow-y-auto scrollable pb-52 max-h-screen w-full px-6 py-6 mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
+        className="overflow-y-auto scrollable pb-52 max-h-screen w-full px-6 py-6 mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:px-14 md:px-20 lg:grid-cols-4 lg:px-16 xl:gap-x-8"
         ref={ref}
         onMouseDown={(e) => handleMouseDown(e, ref)}
         onMouseMove={(e) => handleMouseMove(e, ref)}

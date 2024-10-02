@@ -13,11 +13,15 @@ import { Product } from "@/constants/Product";
 
 interface CategoryProp {
   product: Product;
+  onClick: (product: Product) => void;
 }
 
-const CategoryItemCard: React.FC<CategoryProp> = ({ product }) => {
+const CategoryItemCard: React.FC<CategoryProp> = ({ product, onClick }) => {
   return (
-    <div className="w-full h-[360px] bg-white rounded-3xl">
+    <div
+      className="w-full h-[360px] bg-white rounded-3xl"
+      onClick={() => onClick(product)}
+    >
       <img src={product.Image} alt="" className="w-full h-[60%] object-cover" />
       <div className="h-[40%] flex flex-col items-center justify-evenly w-full">
         <div className="flex flex-col items-center justify-center">
