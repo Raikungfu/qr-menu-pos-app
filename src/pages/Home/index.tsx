@@ -12,7 +12,6 @@ import {
   API_GET_CATEGORIES_BY_SHOPID,
   API_GET_MENU_BY_SHOPID,
 } from "@/Service/Product";
-import { useCartStore } from "@/store/cartStore";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,7 +21,6 @@ const Home = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const cartStore = useCartStore();
 
   const {
     handleMouseDown,
@@ -40,7 +38,7 @@ const Home = () => {
         ]);
 
         if (categoriesData) {
-          const categories = categoriesData as unknown as Category[];
+          var categories = categoriesData as unknown as Category[];
 
           setCategories(
             categories.map((category) => ({
@@ -51,7 +49,7 @@ const Home = () => {
         }
 
         if (productsData) {
-          const products = productsData as unknown as Product[];
+          var products = productsData as unknown as Product[];
           setProducts(products);
         }
       } catch (error) {
@@ -78,7 +76,7 @@ const Home = () => {
       );
 
       if (productsData) {
-        const products = productsData as unknown as Product[];
+        var products = productsData as unknown as Product[];
         setProducts(products);
       }
     } catch (error) {
@@ -86,12 +84,8 @@ const Home = () => {
     }
   };
 
-  const handleAddToCart = (product: Product, size: string) => {
-    cartStore.addToCart(product, size);
-  };
-
   return (
-    <div className="flex h-screen py-4">
+    <div className="flex h-screen">
       <div className="bg-gray-200 h-full w-9/12 p-6">
         <div
           className="w-full bg-white h-24 flex items-center gap-2 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
@@ -125,11 +119,7 @@ const Home = () => {
           onWheel={(e) => handleWheel(e, productsRef)}
         >
           {products.map((product, index) => (
-            <CategoryItemCard
-              key={index}
-              product={product}
-              onClick={handleAddToCart}
-            />
+            <CategoryItemCard key={index} prod={product} />
           ))}
         </div>
       </div>

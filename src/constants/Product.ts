@@ -23,6 +23,7 @@ export interface Customization {
   Name: string;
   Description: string;
   AdditionalCost: number;
+  Cost: number;
   isSelected: boolean;
 }
 
@@ -32,4 +33,11 @@ export interface Category {
   Image: string;
   Description?: string;
   isSelected: boolean;
+}
+
+export interface SizeOption {
+  option: string;
+  price: number;
+  cost: number;
+  quantity: number;
 }
