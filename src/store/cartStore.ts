@@ -1,21 +1,9 @@
 import { create } from "zustand";
-import { Product } from "@/constants/Product";
-
-interface CartProduct {
-  product: Product;
-  quantity: number;
-  size: string;
-}
-
-interface Cart {
-  products: CartProduct[];
-  quantity: number;
-  total: number;
-}
+import { CartItem } from "@/constants/Cart";
 
 interface cartState {
-  cart: Cart;
-  addToCart: (item: Product, size: string) => void;
+  cart: CartItem[];
+  addToCart: (item: CartItem) => void;
   removeFromCart: (index: number) => void;
   getQuantity: () => number;
   getTotal: () => number;
@@ -24,70 +12,70 @@ interface cartState {
 }
 
 export const useCartStore = create<cartState>((set, get) => ({
-  cart: {
-    products: [],
-    quantity: 0,
-    total: 0,
-  },
-  addToCart: (item: Product, size: string) => {
+  cart: [],
+  addToCart: (newItem: CartItem) => {
     set((state) => {
-      const existingProductIndex = state.cart.products.findIndex(
-        (cartProduct) => cartProduct.product.MenuItemId === item.MenuItemId
+      const existingItem = state.cart.find(
+        (item) => item.productId === newItem.productId
       );
 
-      if (existingProductIndex !== -1) {
-        state.cart.products[existingProductIndex].quantity += 1;
-      } else {
-        state.cart.products.push({ product: item, quantity: 1, size });
-        console.log("Add to cart", item, size);
-      }
+      if (existingItem) {
+        existingItem.quantity += newItem.quantity;
 
-      return {
-        cart: {
-          ...state.cart,
-          quantity: state.cart.quantity + 1,
-          total: state.cart.total + item.Price,
-        },
-      };
+        newItem.sizeOptions.forEach((newSizeOption) => {
+          const existingSizeOption = existingItem.sizeOptions.find(
+            (sizeOption) => sizeOption.option === newSizeOption.option
+          );
+
+          if (existingSizeOption) {
+            existingSizeOption.quantity += newSizeOption.quantity;
+          } else {
+            existingItem.sizeOptions.push(newSizeOption);
+          }
+        });
+
+        existingItem.note = newItem.note;
+      } else {
+        state.cart.push(newItem);
+      }
+      console.log(state.cart);
+
+      saveCartToLocalStorage(state.cart);
+
+      return { cart: [...state.cart] };
     });
   },
   removeFromCart: (index: number) => {
     set((state) => {
-      const productToRemove = state.cart.products[index];
-      if (productToRemove) {
-        state.cart.products.splice(index, 1);
-        return {
-          cart: {
-            ...state.cart,
-            quantity: state.cart.quantity - productToRemove.quantity,
-            total:
-              state.cart.total -
-              productToRemove.product.Price * productToRemove.quantity,
-          },
-        };
-      }
-      return state;
+      const updatedCart = [...state.cart];
+      updatedCart.splice(index, 1);
+      saveCartToLocalStorage(updatedCart);
+      return { cart: updatedCart };
     });
   },
+
   getQuantity: () => {
-    return get().cart.quantity;
+    return get().cart.reduce((total, item) => total + item.quantity, 0);
   },
+
   getTotal: () => {
-    return get().cart.total;
-  },
-  reset: () => {
-    set({
-      cart: {
-        products: [],
-        quantity: 0,
-        total: 0,
-      },
-    });
-  },
-  totalItem: (productId: number) => {
-    const product = get().cart.products.find(
-      (cartProduct) => cartProduct.product.MenuItemId === productId
+    return get().cart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
     );
-    return product ? product.quantity : 0;
+  },
+
+  reset: () => {
+    set({ cart: [] });
+    localStorage.removeItem("cartItems");
+  },
+
+  totalItem: (productId: number) => {
+    const item = get().cart.find((item) => item.productId === productId);
+    return item ? item.quantity : 0;
   },
 }));
+
+function saveCartToLocalStorage(items: CartItem[]) {
+  localStorage.setItem("cartItems", JSON.stringify(items));
+}

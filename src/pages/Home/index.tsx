@@ -25,7 +25,6 @@ const Home = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const cartStore = useCartStore();
 
   const {
     handleMouseDown,
@@ -44,7 +43,7 @@ const Home = () => {
         ]);
 
         if (categoriesData) {
-          const categories = categoriesData as unknown as Category[];
+          var categories = categoriesData as unknown as Category[];
 
           setCategories(
             categories.map((category) => ({
@@ -56,7 +55,7 @@ const Home = () => {
         }
 
         if (productsData) {
-          const products = productsData as unknown as Product[];
+          var products = productsData as unknown as Product[];
           setProducts(products);
           setLoading(false);
         }
@@ -86,7 +85,7 @@ const Home = () => {
       );
 
       if (productsData) {
-        const products = productsData as unknown as Product[];
+        var products = productsData as unknown as Product[];
         setProducts(products);
         setLoading(false);
       }
@@ -96,12 +95,8 @@ const Home = () => {
     }
   };
 
-  const handleAddToCart = (product: Product, size: string) => {
-    cartStore.addToCart(product, size);
-  };
-
   return (
-    <div className="flex h-screen py-4">
+    <div className="flex h-screen">
       <div className="bg-gray-200 h-full w-9/12 p-6">
         <div
           className="w-full bg-white h-24 flex items-center gap-2 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
