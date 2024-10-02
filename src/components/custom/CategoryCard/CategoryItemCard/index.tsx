@@ -13,15 +13,14 @@ import { Product } from "@/constants/Product";
 
 interface CategoryProp {
   product: Product;
-  onClick: (product: Product) => void;
+  onClick: (product: Product, size: string) => void;
 }
 
 const CategoryItemCard: React.FC<CategoryProp> = ({ product, onClick }) => {
+  const [selectedSize, setSelectedSize] = React.useState<string>("M");
+
   return (
-    <div
-      className="w-full h-[360px] bg-white rounded-3xl"
-      onClick={() => onClick(product)}
-    >
+    <div className="w-full h-[360px] bg-white rounded-3xl">
       <img src={product.Image} alt="" className="w-full h-[60%] object-cover" />
       <div className="h-[40%] flex flex-col items-center justify-evenly w-full">
         <div className="flex flex-col items-center justify-center">
@@ -34,7 +33,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ product, onClick }) => {
           </h4>
         </div>
         <div className="flex items-center w-full px-2 justify-evenly">
-          <Select>
+          <Select onValueChange={(value) => setSelectedSize(value)}>
             <SelectTrigger className="lg:w-[40%]">
               <SelectValue placeholder="Size" />
             </SelectTrigger>
@@ -47,7 +46,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ product, onClick }) => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button>Thêm</Button>
+          <Button onClick={() => onClick(product, selectedSize)}>Thêm</Button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { Product } from "@/constants/Product";
 interface CartProduct {
   product: Product;
   quantity: number;
+  size: string;
 }
 
 interface Cart {
@@ -14,7 +15,7 @@ interface Cart {
 
 interface cartState {
   cart: Cart;
-  addToCart: (item: Product) => void;
+  addToCart: (item: Product, size: string) => void;
   removeFromCart: (index: number) => void;
   getQuantity: () => number;
   getTotal: () => number;
@@ -28,7 +29,7 @@ export const useCartStore = create<cartState>((set, get) => ({
     quantity: 0,
     total: 0,
   },
-  addToCart: (item: Product) => {
+  addToCart: (item: Product, size: string) => {
     set((state) => {
       const existingProductIndex = state.cart.products.findIndex(
         (cartProduct) => cartProduct.product.MenuItemId === item.MenuItemId
@@ -37,7 +38,8 @@ export const useCartStore = create<cartState>((set, get) => ({
       if (existingProductIndex !== -1) {
         state.cart.products[existingProductIndex].quantity += 1;
       } else {
-        state.cart.products.push({ product: item, quantity: 1 });
+        state.cart.products.push({ product: item, quantity: 1, size });
+        console.log("Add to cart", item, size);
       }
 
       return {

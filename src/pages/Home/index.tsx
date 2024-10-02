@@ -86,9 +86,9 @@ const Home = () => {
     }
   };
 
-  const handleAddToCart = (product: Product) => {
-    cartStore.addToCart(product);
-  }
+  const handleAddToCart = (product: Product, size: string) => {
+    cartStore.addToCart(product, size);
+  };
 
   return (
     <div className="flex h-screen py-4">
@@ -125,7 +125,11 @@ const Home = () => {
           onWheel={(e) => handleWheel(e, productsRef)}
         >
           {products.map((product, index) => (
-            <CategoryItemCard key={index} product={product} onClick={handleAddToCart} />
+            <CategoryItemCard
+              key={index}
+              product={product}
+              onClick={handleAddToCart}
+            />
           ))}
         </div>
       </div>
