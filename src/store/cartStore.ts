@@ -1,18 +1,5 @@
 import { create } from "zustand";
-import { Product } from "@/constants/Product";
 import { CartItem } from "@/constants/Cart";
-
-interface CartProduct {
-  product: Product;
-  quantity: number;
-  size: string;
-}
-
-interface Cart {
-  products: CartProduct[];
-  quantity: number;
-  total: number;
-}
 
 interface cartState {
   cart: CartItem[];
