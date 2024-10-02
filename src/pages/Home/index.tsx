@@ -13,9 +13,12 @@ import {
   API_GET_MENU_BY_SHOPID,
 } from "@/Service/Product";
 import { useCartStore } from "@/store/cartStore";
+import RenderIf from "@/util/RenderIf";
+import Skeleton from "@/components/custom/Skeleton";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const categoriesRef = React.useRef<HTMLDivElement>(null);
   const productsRef = React.useRef<HTMLDivElement>(null);
   const orderedProductsRef = React.useRef<HTMLDivElement>(null);
@@ -34,6 +37,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const [productsData, categoriesData] = await Promise.all([
           API_GET_MENU_BY_SHOPID({ shopId }),
           API_GET_CATEGORIES_BY_SHOPID(),
@@ -48,14 +52,17 @@ const Home = () => {
               isSelected: category.isSelected ?? false,
             }))
           );
+          setLoading(false);
         }
 
         if (productsData) {
           const products = productsData as unknown as Product[];
           setProducts(products);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching home data:", error);
+        setLoading(true);
       }
     };
 
@@ -64,6 +71,7 @@ const Home = () => {
 
   const selectCategory = async (categoryId?: number, isSelected?: boolean) => {
     try {
+      setLoading(true);
       const productsData = await API_GET_MENU_BY_SHOPID({
         shopId,
         categoryId: isSelected ? null : categoryId,
@@ -80,9 +88,11 @@ const Home = () => {
       if (productsData) {
         const products = productsData as unknown as Product[];
         setProducts(products);
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching home data:", error);
+      setLoading(true);
     }
   };
 
@@ -102,16 +112,23 @@ const Home = () => {
           onMouseLeave={handleMouseLeaveOrUp}
           onWheel={(e) => handleWheel(e, categoriesRef)}
         >
-          {categories.map((category, index) => (
-            <CategoryCard
-              key={index}
-              name={category.Name}
-              isSelected={category.isSelected}
-              selectCategory={() =>
-                selectCategory(category.CategoryId, category.isSelected)
-              }
-            />
-          ))}
+          <RenderIf
+            isTrue={!loading}
+            condition2={Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className="w-24 h-10 mx-2" />
+            ))}
+          >
+            {categories.map((category, index) => (
+              <CategoryCard
+                key={index}
+                name={category.Name}
+                isSelected={category.isSelected}
+                selectCategory={() =>
+                  selectCategory(category.CategoryId, category.isSelected)
+                }
+              />
+            ))}
+          </RenderIf>
         </div>
 
         {/* Product along with category */}
@@ -124,13 +141,20 @@ const Home = () => {
           onMouseLeave={handleMouseLeaveOrUp}
           onWheel={(e) => handleWheel(e, productsRef)}
         >
-          {products.map((product, index) => (
-            <CategoryItemCard
-              key={index}
-              product={product}
-              onClick={handleAddToCart}
-            />
-          ))}
+          <RenderIf
+            isTrue={!loading}
+            condition2={Array.from({ length: 12 }).map((_, index) => (
+              <Skeleton key={index} className="w-full h-[360px]" />
+            ))}
+          >
+            {products.map((product, index) => (
+              <CategoryItemCard
+                key={index}
+                product={product}
+                onClick={handleAddToCart}
+              />
+            ))}
+          </RenderIf>
         </div>
       </div>
       <div className="w-3/12 h-full">

@@ -4,12 +4,16 @@ import { OrderCard, OrderItemCard } from "@/components/custom";
 import { Order, OrderItem, OrderList } from "@/constants/orders";
 import useDragScroll from "@/hooks/useDragScroll";
 import { API_GET_ORDER_DETAIL } from "@/Service/Order";
+import RenderIf from "@/util/RenderIf";
+import Skeleton from "@/components/custom/Skeleton";
+
 
 type AtTableProps = {
   orders: OrderList;
 };
 
-const AtTable: React.FC<AtTableProps> = ({ orders }) => {
+const AtTable: React.FC<AtTableProps> = ({ orders}) => {
+  const [loading, setLoading] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
   const {
     handleMouseDown,
@@ -24,14 +28,17 @@ const AtTable: React.FC<AtTableProps> = ({ orders }) => {
 
   const GetOrderDetail = async (id: number) => {
     try {
+      setLoading(true);
       const ordersData = await API_GET_ORDER_DETAIL({ id });
 
       if (ordersData) {
         const orders = ordersData as unknown as OrderItem[];
         setSelectedOrderItems(orders);
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching order detail data:", error);
+      setLoading(true);
     }
   };
 
@@ -47,26 +54,36 @@ const AtTable: React.FC<AtTableProps> = ({ orders }) => {
         onWheel={(e) => handleWheel(e, ref)}
       >
         <div>
-          {orders.map((order, index) => (
-            <div key={index} className="mt-2">
-              <div className="w-full bg-[#C4DDF2] p-1">
-                <p className="text-lg font-semibold">{order.Date}</p>
+          <RenderIf
+            isTrue={!loading}
+            condition2={Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="mt-2">
+                <Skeleton className="w-full h-10 mb-2" />
+                <Skeleton className="w-full h-20" />
               </div>
-              <div className="flex flex-col justify-center">
-                {order.Children.map((child, index) => (
-                  <OrderCard
-                    key={index}
-                    data={child}
-                    active={selectedOrder == child}
-                    onClick={() => {
-                      setselectedOrder(child);
-                      GetOrderDetail(child.Code);
-                    }}
-                  />
-                ))}
+            ))}
+          >
+            {orders.map((order, index) => (
+              <div key={index} className="mt-2">
+                <div className="w-full bg-[#C4DDF2] p-1">
+                  <p className="text-lg font-semibold">{order.Date}</p>
+                </div>
+                <div className="flex flex-col justify-center">
+                  {order.Children.map((child, index) => (
+                    <OrderCard
+                      key={index}
+                      data={child}
+                      active={selectedOrder == child}
+                      onClick={() => {
+                        setselectedOrder(child);
+                        GetOrderDetail(child.Code);
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </RenderIf>
         </div>
       </div>
       <div className="col-span-2 h-full">

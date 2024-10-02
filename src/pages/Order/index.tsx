@@ -143,9 +143,15 @@ const Order = () => {
               }`}
               onClick={() => handleTabClick(tab.id)}
             >
-              {tab.tabTitle} <span>({statusOrderListCount?.CountAll})</span>
+              {tab.tabTitle}{" "}
+              <span>
+                (
+                {statusOrderListCount?.CountAll || 0}
+                )
+              </span>
             </nav>
           ))}
+
           <div></div>
         </div>
         <nav
@@ -173,7 +179,11 @@ const Order = () => {
               }}
             >
               {status.status}
-              <span className="ml-[4px]">({status.count})</span>
+              <span className="ml-[4px]">
+                (
+                {status.count || 0}
+                )
+              </span>
             </Button>
           ))}
         </nav>
