@@ -25,6 +25,7 @@ interface Option {
 }
 interface CategoryProp {
   prod: Product;
+  onAddToCart: () => void;
 }
 
 type GroupOptions = {
@@ -38,7 +39,7 @@ type GroupOptions = {
   }[];
 };
 
-const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
+const CategoryItemCard: React.FC<CategoryProp> = ({ prod, onAddToCart }) => {
   const [openOptions, setOpenOptions] = useState<boolean>(false);
   const [customizationGroups, setCustomizationGroups] = useState<
     CustomizationGroup[]
@@ -58,7 +59,6 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
           const optionsData = await API_GET_MENU_ITEM_CUSTOMIZE_OPTION<{}>({
             productId: product.MenuItemId,
           });
-
           if (optionsData) {
             const options = optionsData as unknown as CustomizationGroup[];
             setCustomizationGroups(options);
@@ -150,7 +150,8 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
   };
 
   const handleQuantityChange = (quantity: number) => {
-    if(quantity < 1) return;
+    if (quantity < 1) return;
+    console.log(quantity);
     setQuantity(quantity);
     setProduct((prevProduct) =>
       prevProduct
@@ -203,6 +204,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
     });
 
     setOpenOptions(false);
+    onAddToCart();
   };
 
   return (
@@ -232,56 +234,66 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
             <DialogDescription>
               Vui lòng chọn các tùy chọn cho sản phẩm
             </DialogDescription>
-           <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center">
               <div className="p-4 w-full">
-                {Object.entries(groupedOptions).map(([groupId, groupOptions]) => {
-                  const groupName =
-                    customizationGroups.find(
-                      (option) =>
-                        option.CustomizationGroupId.toString() === groupId
-                    )?.Name || "Tùy chọn";
-  
-                  return (
-                    <div className="mt-4" key={groupId}>
-                      <p className="text-base font-medium text-gray-900">
-                        {groupName}
-                      </p>
-                      <div className="flex flex-wrap gap-4 mt-2">
-                        {groupOptions.map(
-                          ({ groupId, option, optionId, price, isSelected }) => (
-                            <Label
-                              key={optionId}
-                              className={`flex items-center space-x-2 p-3 border rounded-full cursor-pointer ${
-                                isSelected
-                                  ? "bg-orange-500 text-white"
-                                  : "bg-white text-black"
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name={`option-${groupId}`}
-                                checked={isSelected}
-                                readOnly
-                                onClick={() => handleSelect(groupId, optionId)}
-                                className="form-radio h-4 w-4 text-orange-500"
-                              />
-                              <span>{option}</span>
-                              <span>
-                                {price > 0
-                                  ? " - " +
-                                    price.toLocaleString("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    })
-                                  : ""}
-                              </span>
-                            </Label>
-                          )
-                        )}
+                {Object.entries(groupedOptions).map(
+                  ([groupId, groupOptions]) => {
+                    const groupName =
+                      customizationGroups.find(
+                        (option) =>
+                          option.CustomizationGroupId.toString() === groupId
+                      )?.Name || "Tùy chọn";
+
+                    return (
+                      <div className="mt-4" key={groupId}>
+                        <p className="text-base font-medium text-gray-900">
+                          {groupName}
+                        </p>
+                        <div className="flex flex-wrap gap-4 mt-2">
+                          {groupOptions.map(
+                            ({
+                              groupId,
+                              option,
+                              optionId,
+                              price,
+                              isSelected,
+                            }) => (
+                              <Label
+                                key={optionId}
+                                className={`flex items-center space-x-2 p-3 border rounded-full cursor-pointer ${
+                                  isSelected
+                                    ? "bg-orange-500 text-white"
+                                    : "bg-white text-black"
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name={`option-${groupId}`}
+                                  checked={isSelected}
+                                  readOnly
+                                  onClick={() =>
+                                    handleSelect(groupId, optionId)
+                                  }
+                                  className="form-radio h-4 w-4 text-orange-500"
+                                />
+                                <span>{option}</span>
+                                <span>
+                                  {price > 0
+                                    ? " - " +
+                                      price.toLocaleString("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                      })
+                                    : ""}
+                                </span>
+                              </Label>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
                 <div className="mt-4 p-2 space-y-2">
                   <Label className="block text-sm font-medium text-gray-700">
                     Ghi chú
@@ -312,7 +324,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
                       <PlusCircle size={30} />
                     </div>
                   </div>
-  
+
                   <Button
                     className="w-full py-2 bg-orange-500 text-white rounded-lg"
                     onClick={() => handleAddToCart()}
@@ -321,7 +333,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
                   </Button>
                 </div>
               </div>
-           </div>
+            </div>
           </DialogHeader>
         </DialogContent>
       </Dialog>

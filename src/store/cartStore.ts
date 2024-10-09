@@ -5,13 +5,13 @@ interface cartState {
   cart: CartItem[];
   getCarts: () => CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (index: number) => void;
+  removeFromCart: (index: number, option?: string) => void;
   getQuantity: () => number;
   getTotal: () => number;
   clearCart: () => void;
   totalItem: (productId: number) => number;
-  increaseQuantity: (productId: number) => void;
-  decreaseQuantity: (productId: number) => void;
+  increaseQuantity: (productId: number, option: string) => void;
+  decreaseQuantity: (productId: number, option: string) => void;
 }
 
 export const useCartStore = create<cartState>((set, get) => ({
@@ -49,17 +49,30 @@ export const useCartStore = create<cartState>((set, get) => ({
       } else {
         state.cart.push(newItem);
       }
-      console.log(state.cart);
 
       saveCartToLocalStorage(state.cart);
 
       return { cart: [...state.cart] };
     });
   },
-  removeFromCart: (index: number) => {
+  removeFromCart: (index: number, option?: string) => {
     set((state) => {
       const updatedCart = [...state.cart];
-      updatedCart.splice(index, 1);
+      if (option !== undefined && option !== "") {
+        const item = state.cart.find((item) => item.productId === index);
+        if (!item) return { cart: updatedCart };
+        const sizeOptionIndex = item.sizeOptions.findIndex(
+          (sizeOption) => sizeOption.option === option
+        );
+        if (sizeOptionIndex !== -1) {
+          item.sizeOptions.splice(sizeOptionIndex, 1);
+          if (item.sizeOptions.length === 0) {
+            updatedCart.splice(index, 1);
+          }
+        }
+      } else {
+        updatedCart.splice(index, 1);
+      }
       saveCartToLocalStorage(updatedCart);
       return { cart: updatedCart };
     });
@@ -71,7 +84,12 @@ export const useCartStore = create<cartState>((set, get) => ({
 
   getTotal: () => {
     return get().cart.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) =>
+        item.sizeOptions.reduce(
+          (total, sizeOption) =>
+            total + (item.price + sizeOption.price) * sizeOption.quantity,
+          total
+        ),
       0
     );
   },
@@ -85,30 +103,39 @@ export const useCartStore = create<cartState>((set, get) => ({
     const item = get().cart.find((item) => item.productId === productId);
     return item ? item.quantity : 0;
   },
-  increaseQuantity: (productId: number) => {
+
+  increaseQuantity: (productId: number, option: string) => {
     set((state) => {
       const item = state.cart.find((item) => item.productId === productId);
       if (item) {
         item.quantity += 1;
-        saveCartToLocalStorage(state.cart);
+        item.sizeOptions.forEach((sizeOption) => {
+          if (sizeOption.option === option) {
+            sizeOption.quantity += 1;
+          }
+        });
+        saveCartToLocalStorage([...state.cart]);
       }
       return { cart: [...state.cart] };
     });
   },
 
-  decreaseQuantity: (productId: number) => {
+  decreaseQuantity: (productId: number, option: string) => {
     set((state) => {
       const item = state.cart.find((item) => item.productId === productId);
       if (item) {
-        if (item.quantity >= 2) {
-          item.quantity -= 1;
-          saveCartToLocalStorage(state.cart);
-        }
-        // if (item.quantity === 0) {
-        //   state.cart = state.cart.filter(
-        //     (item) => item.productId !== productId
-        //   );
-        // }
+        item.quantity -= 1;
+        item.sizeOptions.forEach((sizeOption) => {
+          if (sizeOption.option === option) {
+            if (sizeOption.quantity >= 2) {
+              sizeOption.quantity -= 1;
+            } else {
+              confirm("Bạn có muốn xóa tùy chọn này không?") &&
+                get().removeFromCart(item.productId, option);
+            }
+          }
+        });
+        saveCartToLocalStorage([...state.cart]);
       }
       return { cart: [...state.cart] };
     });
@@ -116,5 +143,7 @@ export const useCartStore = create<cartState>((set, get) => ({
 }));
 
 function saveCartToLocalStorage(items: CartItem[]) {
+  localStorage.removeItem("cartItems");
+
   localStorage.setItem("cartItems", JSON.stringify(items));
 }

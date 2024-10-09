@@ -104,6 +104,16 @@ const Home = () => {
     }
   };
 
+  const handleAddToCart = () => {
+    setCarts(cartStore.getCarts());
+    console.log("add to cart");
+  };
+
+  const handleRemoveFromCart = (index: number) => {
+    cartStore.removeFromCart(index);
+    setCarts(cartStore.getCarts());
+  };
+
   return (
     <div className="flex h-screen">
       <div className="bg-gray-200 h-full w-9/12 p-6">
@@ -155,7 +165,7 @@ const Home = () => {
               <CategoryItemCard
                 key={index}
                 prod={product}
-                // onClick={handleAddToCart}
+                onAddToCart={handleAddToCart}
               />
             ))}
           </RenderIf>
@@ -175,14 +185,24 @@ const Home = () => {
             onWheel={(e) => handleWheel(e, orderedProductsRef)}
           >
             {carts?.map((item, index) => (
-              <OrderedProductCard key={index} item={item} onRemove={cartStore.removeFromCart} />
+              <OrderedProductCard
+                key={index}
+                item={item}
+                onRemove={handleRemoveFromCart}
+                index={index}
+              />
             ))}
           </div>
         </div>
         <div className=" w-full h-[30%]">
           <div className="w-full flex justify-between border-t px-4 py-2 border-black font-semibold text-sm">
             <h3 className="">Tạm tính</h3>
-            <h3 className="">0đ</h3>
+            <h3 className="">
+              {cartStore.getTotal().toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+            </h3>
           </div>
           <div className="w-full flex flex-col border-t px-4 py-2 border-black">
             <div className="flex justify-between mb-3">
