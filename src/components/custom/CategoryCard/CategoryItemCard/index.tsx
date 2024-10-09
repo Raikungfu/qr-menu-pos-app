@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MinusCircle, PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

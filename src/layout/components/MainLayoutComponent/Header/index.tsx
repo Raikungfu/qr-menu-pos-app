@@ -1,7 +1,4 @@
-import { Search } from "lucide-react";
-
 import logo from "@/assets/logo.jpeg";
-import { Input } from "@/components/ui/input";
 const Header = () => {
   return (
     <header className="h-[74px] bg-white w-full shadow-md flex items-center gap-20 px-5 fixed top-0 right-0 left-0 z-50">
