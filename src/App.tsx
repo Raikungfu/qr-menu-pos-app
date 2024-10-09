@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React from "react";
+
 import MainLayout from "./layout/MainLayout";
 import { routes } from "./routers";
 import OrderStatusComponent from "./components/custom/OrderStatus";
-import React from "react";
 
 function App() {
   return (

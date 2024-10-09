@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CustomizationGroup, Product, SizeOption } from "@/constants/Product";
 import { API_GET_MENU_ITEM_CUSTOMIZE_OPTION } from "@/Service/Product";
 import { useCartStore } from "@/store/cartStore";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface Option {
   option: string;
@@ -37,27 +47,9 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
   const [product, setProduct] = useState<Product>(prod);
   const dispatch = useCartStore();
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
   const [options, setOptions] = useState<Option[]>([]);
   const [note, setNote] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        setOpenOptions(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [modalRef, openOptions]);
 
   useEffect(() => {
     if (openOptions && options.length === 0) {
@@ -68,7 +60,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
           });
 
           if (optionsData) {
-            var options = optionsData as unknown as CustomizationGroup[];
+            const options = optionsData as unknown as CustomizationGroup[];
             setCustomizationGroups(options);
           }
         } catch (error) {
@@ -81,7 +73,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
   }, [openOptions, options]);
 
   useEffect(() => {
-    var opts = customizationGroups.slice(0).flatMap((group) =>
+    const opts = customizationGroups.slice(0).flatMap((group) =>
       group.Customizations.map((c) => ({
         optionId: c.MenuItemCustomizationId,
         groupId: group.CustomizationGroupId,
@@ -158,10 +150,11 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
   };
 
   const handleQuantityChange = (quantity: number) => {
+    if(quantity < 1) return;
     setQuantity(quantity);
     setProduct((prevProduct) =>
       prevProduct
-        ? { ...prevProduct, Quantity: quantity > 0 ? quantity : 1 }
+        ? { ...prevProduct, Quantity: quantity >= 1 ? quantity : 1 }
         : prevProduct
     );
   };
@@ -208,6 +201,8 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
       price: product.Price,
       cost: product.Price,
     });
+
+    setOpenOptions(false);
   };
 
   return (
@@ -230,93 +225,106 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod }) => {
           <Button>Thêm</Button>
         </div>
       </div>
-      {openOptions && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          <div ref={modalRef} className="p-4 bg-white shadow-md rounded-lg">
-            {Object.entries(groupedOptions).map(([groupId, groupOptions]) => {
-              const groupName =
-                customizationGroups.find(
-                  (option) => option.CustomizationGroupId.toString() === groupId
-                )?.Name || "Tùy chọn";
-
-              return (
-                <div className="mt-4" key={groupId}>
-                  <h3 className="text-base font-semibold">{groupName}</h3>
-                  <div className="flex flex-wrap gap-4 mt-2">
-                    {groupOptions.map(
-                      ({ groupId, option, optionId, price, isSelected }) => (
-                        <label
-                          key={optionId}
-                          className={`flex items-center space-x-2 p-2 border rounded-full cursor-pointer ${
-                            isSelected
-                              ? "bg-orange-500 text-white"
-                              : "bg-white text-black"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name={`option-${groupId}`}
-                            checked={isSelected}
-                            onClick={() => handleSelect(groupId, optionId)}
-                            className="form-radio h-4 w-4 text-orange-500"
-                          />
-                          <span>{option}</span>
-                          <span>
-                            {price > 0
-                              ? " - " +
-                                price.toLocaleString("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                })
-                              : ""}
-                          </span>
-                        </label>
-                      )
-                    )}
-                  </div>
+      <Dialog open={openOptions} onOpenChange={() => setOpenOptions(false)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Lựa chọn</DialogTitle>
+            <DialogDescription>
+              Vui lòng chọn các tùy chọn cho sản phẩm
+            </DialogDescription>
+           <div className="flex justify-center items-center">
+              <div className="p-4 w-full">
+                {Object.entries(groupedOptions).map(([groupId, groupOptions]) => {
+                  const groupName =
+                    customizationGroups.find(
+                      (option) =>
+                        option.CustomizationGroupId.toString() === groupId
+                    )?.Name || "Tùy chọn";
+  
+                  return (
+                    <div className="mt-4" key={groupId}>
+                      <p className="text-base font-medium text-gray-900">
+                        {groupName}
+                      </p>
+                      <div className="flex flex-wrap gap-4 mt-2">
+                        {groupOptions.map(
+                          ({ groupId, option, optionId, price, isSelected }) => (
+                            <Label
+                              key={optionId}
+                              className={`flex items-center space-x-2 p-3 border rounded-full cursor-pointer ${
+                                isSelected
+                                  ? "bg-orange-500 text-white"
+                                  : "bg-white text-black"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`option-${groupId}`}
+                                checked={isSelected}
+                                readOnly
+                                onClick={() => handleSelect(groupId, optionId)}
+                                className="form-radio h-4 w-4 text-orange-500"
+                              />
+                              <span>{option}</span>
+                              <span>
+                                {price > 0
+                                  ? " - " +
+                                    price.toLocaleString("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    })
+                                  : ""}
+                              </span>
+                            </Label>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                <div className="mt-4 p-2 space-y-2">
+                  <Label className="block text-sm font-medium text-gray-700">
+                    Ghi chú
+                  </Label>
+                  <Textarea
+                    placeholder="Nhập ghi chú"
+                    value={note}
+                    onChange={(e) => handleNoteChange(e.target.value)}
+                  />
                 </div>
-              );
-            })}
-
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Ghi chú
-              </label>
-              <textarea
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
-                rows={2}
-                value={note}
-                onChange={(e) => handleNoteChange(e.target.value)}
-              />
-            </div>
-
-            <div className="sticky flex items-center space-x-4 mt-4">
-              <div className="flex items-center space-x-2">
-                <button
-                  className="w-10 h-10 flex items-center justify-center border rounded-full"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                >
-                  -
-                </button>
-                <span className="px-4">{quantity ? quantity : 1}</span>
-                <button
-                  className="w-10 h-10 flex items-center justify-center border rounded-full"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                >
-                  +
-                </button>
+                <div className="flex items-center gap-6 mt-4">
+                  <div className="flex gap-3 p-1 items-center justify-center bg-white rounded-full w-2/4">
+                    <div
+                      className={`${
+                        quantity > 1
+                          ? "text-primary cursor-pointer"
+                          : "text-gray-200 cursor-not-allowed"
+                      }`}
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                    >
+                      <MinusCircle size={30} />
+                    </div>
+                    <span className="font-medium text-xl">{quantity}</span>
+                    <div
+                      className="text-primary cursor-pointer"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                    >
+                      <PlusCircle size={30} />
+                    </div>
+                  </div>
+  
+                  <Button
+                    className="w-full py-2 bg-orange-500 text-white rounded-lg"
+                    onClick={() => handleAddToCart()}
+                  >
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
               </div>
-
-              <button
-                className="ml-auto w-full py-2 bg-orange-500 text-white rounded-lg"
-                onClick={() => handleAddToCart()}
-              >
-                Thêm vào giỏ hàng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+           </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

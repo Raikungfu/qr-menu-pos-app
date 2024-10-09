@@ -3,16 +3,27 @@ import { CartItem } from "@/constants/Cart";
 
 interface cartState {
   cart: CartItem[];
+  getCarts: () => CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (index: number) => void;
   getQuantity: () => number;
   getTotal: () => number;
-  reset: () => void;
+  clearCart: () => void;
   totalItem: (productId: number) => number;
+  increaseQuantity: (productId: number) => void;
+  decreaseQuantity: (productId: number) => void;
 }
 
 export const useCartStore = create<cartState>((set, get) => ({
   cart: [],
+  getCarts: () => {
+    const cartItems = localStorage.getItem("cartItems");
+    if (cartItems) {
+      set({ cart: JSON.parse(cartItems) });
+    }
+    return get().cart;
+  },
+
   addToCart: (newItem: CartItem) => {
     set((state) => {
       const existingItem = state.cart.find(
@@ -65,7 +76,7 @@ export const useCartStore = create<cartState>((set, get) => ({
     );
   },
 
-  reset: () => {
+  clearCart: () => {
     set({ cart: [] });
     localStorage.removeItem("cartItems");
   },
@@ -73,6 +84,34 @@ export const useCartStore = create<cartState>((set, get) => ({
   totalItem: (productId: number) => {
     const item = get().cart.find((item) => item.productId === productId);
     return item ? item.quantity : 0;
+  },
+  increaseQuantity: (productId: number) => {
+    set((state) => {
+      const item = state.cart.find((item) => item.productId === productId);
+      if (item) {
+        item.quantity += 1;
+        saveCartToLocalStorage(state.cart);
+      }
+      return { cart: [...state.cart] };
+    });
+  },
+
+  decreaseQuantity: (productId: number) => {
+    set((state) => {
+      const item = state.cart.find((item) => item.productId === productId);
+      if (item) {
+        if (item.quantity >= 2) {
+          item.quantity -= 1;
+          saveCartToLocalStorage(state.cart);
+        }
+        // if (item.quantity === 0) {
+        //   state.cart = state.cart.filter(
+        //     (item) => item.productId !== productId
+        //   );
+        // }
+      }
+      return { cart: [...state.cart] };
+    });
   },
 }));
 

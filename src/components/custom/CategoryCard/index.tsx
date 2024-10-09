@@ -17,14 +17,14 @@ const CategoryCard = ({
 }: CategoryCardProps) => {
   return (
     <div
-      className={`min-w-[180px] flex items-center justify-center ${className}`}
+      className={` flex items-center justify-center ${className}`}
       onClick={() => selectCategory()}
     >
       <Button
         variant="outline"
         size="lg"
-        className={`w-full rounded-3xl text-lg bg-[#ebf6fc] ${
-          isSelected ? "border-primary text-primary" : ""
+        className={`w-full rounded-xl text-lg bg-[#ebf6fc] ${
+          isSelected ? "text-white bg-primary" : ""
         }`}
       >
         {name}

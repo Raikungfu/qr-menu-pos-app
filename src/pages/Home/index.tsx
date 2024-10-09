@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Printer } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { CategoryCard, CategoryItemCard } from "@/components/custom";
+import {
+  CategoryCard,
+  CategoryItemCard,
+  OrderedProductCard,
+} from "@/components/custom";
 import useDragScroll from "@/hooks/useDragScroll";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,9 +16,10 @@ import {
   API_GET_CATEGORIES_BY_SHOPID,
   API_GET_MENU_BY_SHOPID,
 } from "@/Service/Product";
-import { useCartStore } from "@/store/cartStore";
 import RenderIf from "@/util/RenderIf";
 import Skeleton from "@/components/custom/Skeleton";
+import { useCartStore } from "@/store/cartStore";
+import { CartItem } from "@/constants/Cart";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,6 +30,8 @@ const Home = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [carts, setCarts] = useState<CartItem[]>([]);
+  const cartStore = useCartStore();
 
   const {
     handleMouseDown,
@@ -43,7 +50,7 @@ const Home = () => {
         ]);
 
         if (categoriesData) {
-          var categories = categoriesData as unknown as Category[];
+          const categories = categoriesData as unknown as Category[];
 
           setCategories(
             categories.map((category) => ({
@@ -55,7 +62,7 @@ const Home = () => {
         }
 
         if (productsData) {
-          var products = productsData as unknown as Product[];
+          const products = productsData as unknown as Product[];
           setProducts(products);
           setLoading(false);
         }
@@ -64,6 +71,8 @@ const Home = () => {
         setLoading(true);
       }
     };
+
+    setCarts(cartStore.getCarts());
 
     fetchData();
   }, [shopId]);
@@ -85,7 +94,7 @@ const Home = () => {
       );
 
       if (productsData) {
-        var products = productsData as unknown as Product[];
+        const products = productsData as unknown as Product[];
         setProducts(products);
         setLoading(false);
       }
@@ -99,7 +108,7 @@ const Home = () => {
     <div className="flex h-screen">
       <div className="bg-gray-200 h-full w-9/12 p-6">
         <div
-          className="w-full bg-white h-24 flex items-center gap-2 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
+          className="w-full bg-white h-24 flex items-center gap-4 px-6 pt-2 overflow-x-auto scrollable rounded-2xl"
           ref={categoriesRef}
           onMouseDown={(e) => handleMouseDown(e, categoriesRef)}
           onMouseMove={(e) => handleMouseMove(e, categoriesRef)}
@@ -145,8 +154,8 @@ const Home = () => {
             {products.map((product, index) => (
               <CategoryItemCard
                 key={index}
-                product={product}
-                onClick={handleAddToCart}
+                prod={product}
+                // onClick={handleAddToCart}
               />
             ))}
           </RenderIf>
@@ -165,11 +174,9 @@ const Home = () => {
             onMouseLeave={handleMouseLeaveOrUp}
             onWheel={(e) => handleWheel(e, orderedProductsRef)}
           >
-            {/*<OrderedProductCard />
-            <OrderedProductCard />
-            <OrderedProductCard />
-            <OrderedProductCard />
-            <OrderedProductCard /> */}
+            {carts?.map((item, index) => (
+              <OrderedProductCard key={index} item={item} onRemove={cartStore.removeFromCart} />
+            ))}
           </div>
         </div>
         <div className=" w-full h-[30%]">
@@ -181,9 +188,18 @@ const Home = () => {
             <div className="flex justify-between mb-3">
               <div className="font-semibold">
                 <h3 className="text-base">
-                  Tổng cộng <span className="text-primary">0 món</span>
+                  Tổng cộng{" "}
+                  <span className="text-primary">
+                    {cartStore.getQuantity()} món
+                  </span>
                 </h3>
-                <h3 className="underline">0đ</h3>
+                <h3 className="underline">
+                  {" "}
+                  {cartStore.getTotal().toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </h3>
               </div>
               <div className="flex flex-col items-center cursor-pointer">
                 <Printer className="text-primary" />
