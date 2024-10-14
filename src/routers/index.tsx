@@ -1,5 +1,6 @@
 import config from "@/configs";
 import StatisticLayout from "@/layout/StatisticLayout";
+import HeaderOnlyLayout from "@/layout/HeaderOnlyLayout";
 import { Home, AtCounter, Order, Shop, Payment } from "@/pages";
 import BestSeller from "@/pages/Statistic/BestSeller";
 import Receipt from "@/pages/Receipt";
@@ -8,12 +9,15 @@ import Setting from "@/pages/Setting";
 import ChartReport from "@/pages/Statistic/ChartReport";
 import Overview from "@/pages/Statistic/Overview";
 import Topping from "@/pages/Topping";
+import Login from "@/pages/Login";
+
 const routes = [
-  { path: config.routes.home, component: Home },
+  { path: config.routes.home, component: Home, layout: HeaderOnlyLayout },
   { path: config.routes.atcounter, component: AtCounter },
   { path: config.routes.order, component: Order },
   { path: config.routes.revenue, component: Revenue },
   { path: config.routes.shop, component: Shop },
+  { path: config.routes.login, component: Login, layout: null, isAuth: false },
   {
     path: config.routes.overview,
     component: Overview,
