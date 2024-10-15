@@ -1,5 +1,6 @@
+import { API_BASE_URL } from "@/constants/constant";
+import useCheckLoginStatus from "@/hooks/useCheckLoginStatus";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   user: string | null;
@@ -12,17 +13,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<string | null>(null);
-  // const nagivate = useNavigate();
+  const { isLoggedIn } = useCheckLoginStatus();
+  const [user, setUser] = useState<string | null>(null);  
 
+  if(!isLoggedIn) {
+    window.location.href = API_BASE_URL;
+    return <div>You are not allowed to access</div>
+  }
 
   const login = (email: string) => {
     setUser(email);
   };
 
   const logout = () => {
-    setUser(null);
-    // nagivate("/login");
+    localStorage.removeItem("token");
+    window.location.href = API_BASE_URL;
   };
 
   return (

@@ -29,7 +29,7 @@ const routes = [
     layout: StatisticLayout,
   },
   { path: config.routes.overview, component: Overview },
-  { path: config.routes.payment, component: Payment },
+  { path: config.routes.payment, component: Payment, layout: null },
   { path: config.routes.setting, component: Setting },
   {
     path: config.routes.bestseller,

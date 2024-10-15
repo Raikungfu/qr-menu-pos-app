@@ -129,7 +129,7 @@ const AtCounter = () => {
           <RenderIf
             isTrue={!loading}
             condition2={Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton key={index} className="w-24 h-10 mx-2" />
+              <Skeleton key={index} className="w-28 h-10 mx-2" />
             ))}
           >
             {categories.map((category, index) => (
@@ -174,9 +174,8 @@ const AtCounter = () => {
       <div className="w-3/12 h-full">
         {/* order item */}
         <div className="w-full h-[70%] px-4 pt-2">
-          <Textarea placeholder="Nhập ghi chú" />
           <div
-            className="flex flex-col gap-2 w-full mt-3 max-h-[82%] overflow-auto scrollable"
+            className="flex flex-col gap-2 w-full mt-3 max-h-[95%] overflow-auto scrollable"
             ref={orderedProductsRef}
             onMouseDown={(e) => handleMouseDown(e, orderedProductsRef)}
             onMouseMove={(e) => handleMouseMove(e, orderedProductsRef)}

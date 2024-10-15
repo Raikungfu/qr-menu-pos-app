@@ -7,9 +7,8 @@ import { Input } from "@/components/ui/input";
 import config from "@/configs";
 import { Label } from "@/components/ui/label";
 import PaymentKeypad from "./PaymentKeyPad";
-type PaymentProps = {};
 
-const Payment = ({}: PaymentProps) => {
+const Payment = () => {
   const navigate = useNavigate();
   const [moneyChange, setMoneyChange] = React.useState<number>(0);
   return (
@@ -18,7 +17,7 @@ const Payment = ({}: PaymentProps) => {
         <Undo2
           size={32}
           className="cursor-pointer"
-          onClick={() => navigate(config.routes.home)}
+          onClick={() => navigate(config.routes.atcounter)}
         />
         <h3 className="text-2xl font-semibold">Thanh toán</h3>
       </header>

@@ -1,10 +1,11 @@
 import logo from "@/assets/logo.jpeg";
 import { useAuth } from "@/auth/AuthContext";
+// import { useAuth } from "@/auth/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   return (
     <header className="h-[74px] bg-white w-full shadow-md flex items-center justify-between gap-20 px-5 fixed top-0 right-0 left-0 z-50">
       <div className="flex items-center gap-2">
