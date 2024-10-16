@@ -9,7 +9,6 @@ import {
 } from "@/components/custom";
 import useDragScroll from "@/hooks/useDragScroll";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import config from "@/configs";
 import { Category, Product } from "@/constants/Product";
 import {
