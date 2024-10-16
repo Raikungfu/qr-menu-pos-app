@@ -11,6 +11,7 @@ export const API_BASE_URL: string = (() => {
 export type FormDataOrOther<T> = T;
 
 export interface errorData {
+  message?: string;
   error?: string;
   status?: number;
 }

@@ -1,6 +1,9 @@
 import { API_BASE_URL } from "@/constants/constant";
 import useCheckLoginStatus from "@/hooks/useCheckLoginStatus";
+import { routes } from "@/routers";
+import { API_LOGOUT } from "@/Service/User";
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   user: string | null;
@@ -13,12 +16,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { isLoggedIn } = useCheckLoginStatus();
-  const [user, setUser] = useState<string | null>(null);  
+  const [user, setUser] = useState<string | null>(null);
+  const { isLoggedIn, loading, error } = useCheckLoginStatus();
+  const nav = useNavigate();
+  const loc = useLocation();
 
-  if(!isLoggedIn) {
-    window.location.href = API_BASE_URL;
-    return <div>You are not allowed to access</div>
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  const currentRoute = routes.find((route) => loc.pathname === route.path);
+
+  if (currentRoute?.isAuth) {
+    if (error || !isLoggedIn) {
+      nav("/login");
+      return <div>You are not allowed to access</div>;
+    }
   }
 
   const login = (email: string) => {
@@ -27,7 +39,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = () => {
     localStorage.removeItem("token");
-    window.location.href = API_BASE_URL;
+    nav("/login");
+    API_LOGOUT();
   };
 
   return (

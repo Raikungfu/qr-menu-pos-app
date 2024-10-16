@@ -142,7 +142,6 @@ const Shop = () => {
 
   useEffect(() => {
     const tables = zones.find((zone) => zone.id === activeZone)?.tables || [];
-    console.log(tables);
     setZoneTables(tables);
   }, []);
 

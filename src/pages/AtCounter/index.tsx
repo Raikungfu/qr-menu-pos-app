@@ -105,7 +105,6 @@ const AtCounter = () => {
 
   const handleAddToCart = () => {
     setCarts(cartStore.getCarts());
-    console.log("add to cart");
   };
 
   const handleRemoveFromCart = (index: number) => {

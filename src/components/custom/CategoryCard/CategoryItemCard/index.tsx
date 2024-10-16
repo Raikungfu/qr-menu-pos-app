@@ -151,7 +151,6 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod, onAddToCart }) => {
 
   const handleQuantityChange = (quantity: number) => {
     if (quantity < 1) return;
-    console.log(quantity);
     setQuantity(quantity);
     setProduct((prevProduct) =>
       prevProduct
@@ -190,8 +189,6 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod, onAddToCart }) => {
         cost: totalCost,
       },
     ];
-
-    console.log(product);
 
     dispatch.addToCart({
       productId: product.MenuItemId,
