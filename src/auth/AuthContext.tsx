@@ -1,4 +1,3 @@
-import { API_BASE_URL } from "@/constants/constant";
 import useCheckLoginStatus from "@/hooks/useCheckLoginStatus";
 import { routes } from "@/routers";
 import { API_LOGOUT } from "@/Service/User";
