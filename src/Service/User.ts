@@ -39,3 +39,22 @@ export const API_LOGOUT = <T>(): Promise<T> => {
       throw error;
     });
 };
+
+export const API_LOGIN = <T>(data: FormDataOrOther<T>): Promise<T> => {
+  return AxiosApi.post<T>("/Coffee-Shop/Login", data)
+    .then((response) => {
+      if (response.data) {
+        return response.data;
+      } else {
+        const error = response.error as AxiosError;
+        const x = error.response?.data as errorData;
+        throw new Error(
+          (error.status ? "Status: " + error.status : "Status unknown") +
+            (x.error || x.message || "Input not correct!")
+        );
+      }
+    })
+    .catch((error) => {
+      throw error;
+    });
+};

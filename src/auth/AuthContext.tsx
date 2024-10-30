@@ -1,12 +1,14 @@
 import useCheckLoginStatus from "@/hooks/useCheckLoginStatus";
+import { LoginFormValues } from "@/pages/Login";
 import { routes } from "@/routers";
-import { API_LOGOUT } from "@/Service/User";
+import { API_LOGIN, API_LOGOUT } from "@/Service/User";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import FormData from "form-data";
 
 interface AuthContextType {
   user: string | null;
-  login: (email: string) => void;
+  login: (values: LoginFormValues) => void;
   logout: () => void;
 }
 
@@ -28,16 +30,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   if (currentRoute?.isAuth) {
     if (error || !isLoggedIn) {
       nav("/login");
+      console.log("You are not allowed to access");
       return <div>You are not allowed to access</div>;
     }
   }
 
-  const login = (email: string) => {
-    setUser(email);
-  };
+  const login = async (values: LoginFormValues) => {
+    const formData = new FormData();
+    formData.append("Email", values.Email);
+    formData.append("Password", values.Password);
 
+    const result = await API_LOGIN(formData);
+    if (result != null) {
+      const resultParsed = result as unknown as {
+        token: string;
+        success: boolean;
+      };
+      localStorage.setItem("Token", resultParsed.token);
+      window.location.href = "/";
+    } else {
+      console.log("Login failed");
+    }
+  };
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("Token");
     nav("/login");
     API_LOGOUT();
   };

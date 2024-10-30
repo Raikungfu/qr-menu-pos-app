@@ -13,8 +13,8 @@ const useCheckLoginStatus = () => {
 
       try {
         const queryParam = new URLSearchParams(window.location.search);
-        const tokenFromURL = queryParam.get("token");
-        const token = tokenFromURL || localStorage.getItem("token");
+        const tokenFromURL = queryParam.get("Token");
+        const token = localStorage.getItem("Token") || tokenFromURL;
 
         if (!token) {
           setIsLoggedIn(false);
