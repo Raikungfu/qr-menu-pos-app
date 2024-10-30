@@ -44,16 +44,18 @@ const menuItem = [
 
 const Home = () => {
   return (
-    <div className="grid grid-cols-2 gap-6">
-      {menuItem.map((item, index) => (
-        <NavLink key={index} to={item.link} className="border-2 p-12 text-2xl rounded-md">
-          <div className="flex flex-col items-center gap-2">
-            <span>{item.icon}</span>
-            {item.title}
-          </div>
-        </NavLink>
-      ))}
-    </div>
+   <div className="w-full max-h-screen overflow-y-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {menuItem.map((item, index) => (
+          <NavLink key={index} to={item.link} className="flex items-center justify-center border-2 p-12 text-2xl rounded-md">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span>{item.icon}</span>
+              {item.title}
+            </div>
+          </NavLink>
+        ))}
+      </div>
+   </div>
   );
 };
 

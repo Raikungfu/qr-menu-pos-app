@@ -1,12 +1,10 @@
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/auth/AuthContext";
-import config from "@/configs";
 import {
   Card,
   CardContent,
@@ -25,27 +23,25 @@ import {
 
 const loginSchema = z.object({
   // email: z.string().email("Sai định dạng email"),
-  email: z.string().min(6, "Email phải có ít nhất 6 ký tự"),
-  password: z.string().min(6, "Password phải có ít nhất 6 ký tự"),
+  Email: z.string().min(6, "Email phải có ít nhất 6 ký tự"),
+  Password: z.string().min(6, "Password phải có ít nhất 6 ký tự"),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      Email: "",
+      Password: "",
     },
   });
 
   const onSubmit = (values: LoginFormValues) => {
-    login(values.email);
-    navigate(config.routes.home);
+    login(values);
   };
 
   return (
@@ -59,7 +55,7 @@ const Login = () => {
             <CardContent className="space-y-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="Email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -72,7 +68,7 @@ const Login = () => {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="Password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Mật khẩu</FormLabel>

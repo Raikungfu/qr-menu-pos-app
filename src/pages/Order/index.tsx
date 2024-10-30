@@ -167,7 +167,7 @@ const Order = () => {
             <Button
               key={status.id}
               variant="outline"
-              className={`rounded-3xl ${
+              className={`rounded-3xl min-w-fit ${
                 activeStatus === status.status ? "bg-blue-500 text-white" : ""
               }`}
               size="lg"
