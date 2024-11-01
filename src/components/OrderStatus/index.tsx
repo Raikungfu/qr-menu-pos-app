@@ -16,6 +16,18 @@ const OrderStatusComponent: React.FC<OrderStatusProps> = ({
   const [showNotification, setShowNotification] = useState(false);
   const nav = useNavigate();
 
+  const convertDate = (date: Date) => {
+    return new Date(date).toLocaleString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
   const handleOrderStatusUpdate = (
     orderId: number,
     status: string,
@@ -23,9 +35,38 @@ const OrderStatusComponent: React.FC<OrderStatusProps> = ({
     paymentMethod: string
   ) => {
     setOrderId(orderId);
-    triggerNotification(
-      `Order ID: ${orderId}, Status: ${status} \nPayment method: ${updateDate}\n Time: ${paymentMethod}`
-    );
+    switch (status) {
+      case "PENDING":
+        triggerNotification(
+          `Order ID: ${orderId}, Status: ${status}<br />Payment method: ${paymentMethod}<br />Time: ${convertDate(
+            updateDate
+          )}`
+        );
+        break;
+      case "PREPARING":
+        triggerNotification(
+          `Order is being prepared<br />Order ID: ${orderId}, Order Date: ${convertDate(
+            updateDate
+          )}`
+        );
+        break;
+      case "COMPLETED":
+        triggerNotification(
+          `Order has been completed!<br />Order ID: ${orderId}, Order Date: ${convertDate(
+            updateDate
+          )}`
+        );
+        break;
+      case "CANCELLED":
+        triggerNotification(
+          `Order has been cancelled.<br />Order ID: ${orderId}, Order Date: ${convertDate(
+            updateDate
+          )}`
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const triggerNotification = (message: string) => {
