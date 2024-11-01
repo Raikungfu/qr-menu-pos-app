@@ -217,11 +217,11 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod, onAddToCart }) => {
             })}
           </h4>
         </div>
-        <div className="flex items-center w-full px-2 gap-2 justify-evenly">
+        <div className="flex items-center w-full px-2 justify-evenly">
           <Button variant="outline" onClick={() => setOpenOptions(true)}>
             Lựa chọn
           </Button>
-          <Button>Thêm</Button>
+          <Button onClick={() => setOpenOptions(true)}>Thêm</Button>
         </div>
       </div>
       <Dialog open={openOptions} onOpenChange={() => setOpenOptions(false)}>
@@ -232,7 +232,7 @@ const CategoryItemCard: React.FC<CategoryProp> = ({ prod, onAddToCart }) => {
               Vui lòng chọn các tùy chọn cho sản phẩm
             </DialogDescription>
             <div className="flex justify-center items-center">
-              <div className="p-4 w-full">
+              <div className="w-full">
                 {Object.entries(groupedOptions).map(
                   ([groupId, groupOptions]) => {
                     const groupName =

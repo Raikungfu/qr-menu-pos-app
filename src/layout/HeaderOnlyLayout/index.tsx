@@ -6,7 +6,7 @@ const HeaderOnlyLayout = ({ children }: { children: React.ReactElement }) => {
   return (
     <div className="h-screen">
       <Header />
-      <main className="w-full mt-[74px] px-52 py-10">
+      <main className="w-full mt-[74px] px-20 sm:px-32  md:px-40 lg:px-52 py-10">
         {children}
         <Toaster />
       </main>

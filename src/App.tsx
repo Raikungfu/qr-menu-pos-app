@@ -13,6 +13,7 @@ function App() {
       <ErrorBoundary>
         <BrowserRouter>
           <AuthProvider>
+            <OrderStatusComponent />
             <Routes>
               {routes.map((route, index) => {
                 const Page = route.component;

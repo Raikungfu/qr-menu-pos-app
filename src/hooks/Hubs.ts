@@ -38,7 +38,9 @@ const useSignalR = ({
       .withUrl(
         `${API_BASE_URL}/AppHub/order?deviceId=${encodeURIComponent(
           deviceId
-        )}&role=${encodeURIComponent("customer")}&id=${encodeURIComponent(id)}`,
+        )}&role=${encodeURIComponent(
+          "CoffeeShopManager"
+        )}&id=${encodeURIComponent(id)}`,
         {
           skipNegotiation: true,
           transport: signalR.HttpTransportType.WebSockets,

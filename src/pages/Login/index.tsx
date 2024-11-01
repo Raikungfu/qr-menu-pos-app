@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -31,7 +30,6 @@ const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
 
   const form = useForm<LoginFormValues>({

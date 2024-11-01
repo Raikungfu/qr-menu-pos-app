@@ -87,3 +87,69 @@
 body {
   font-family: "IBM Plex Sans", "sans-serif";
 }
+
+/* Loading animation */
+.svg-animation {
+  overflow: visible;
+  width: 100px;
+  height: 150px;
+}
+
+.g-animation {
+  animation: slide 2s linear infinite;
+}
+
+.g-animation:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.g-animation:nth-child(2) .path-animation {
+  animation-delay: 0.5s;
+  stroke-dasharray: 0px 158px;
+  stroke-dashoffset: 1px;
+}
+
+.path-animation {
+  stroke: url(#gradient);
+  stroke-width: 20px;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 0 157px;
+  stroke-dashoffset: 0;
+  animation: escalade 2s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+@keyframes escalade {
+  0% {
+    stroke-dasharray: 0 157px;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 157px 157px;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dasharray: 157px 157px;
+    stroke-dashoffset: -156px;
+  }
+}
+
+
+.rsw-ce ul {
+  list-style: disc;
+  padding-left: 2em;
+}
+
+.rsw-ce ol {
+  list-style: decimal;
+  padding-left: 2em;
+}

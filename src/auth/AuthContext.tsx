@@ -1,10 +1,12 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { createContext, useContext, ReactNode, useState } from "react";
+import FormData from "form-data";
+
 import useCheckLoginStatus from "@/hooks/useCheckLoginStatus";
 import { LoginFormValues } from "@/pages/Login";
 import { routes } from "@/routers";
 import { API_LOGIN, API_LOGOUT } from "@/Service/User";
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import FormData from "form-data";
+import Loading from "@/components/custom/Loading";
 
 interface AuthContextType {
   user: string | null;
@@ -23,12 +25,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const loc = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
+
   const currentRoute = routes.find((route) => loc.pathname === route.path);
 
   if (currentRoute?.isAuth) {
-    if (error || !isLoggedIn) {
+    if (!isLoggedIn || error) {
       nav("/login");
       console.log("You are not allowed to access");
       return <div>You are not allowed to access</div>;
@@ -36,6 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   const login = async (values: LoginFormValues) => {
+    setUser(values.Email);
     const formData = new FormData();
     formData.append("Email", values.Email);
     formData.append("Password", values.Password);
